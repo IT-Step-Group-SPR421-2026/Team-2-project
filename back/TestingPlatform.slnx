@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="TestingPlatform.BLL/TestingPlatform.BLL.csproj" />
+  <Project Path="TestingPlatform.DAL/TestingPlatform.DAL.csproj" />
+  <Project Path="TestingPlatform/TestingPlatform.csproj" />
+</Solution>
