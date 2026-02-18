@@ -12,3 +12,4 @@ namespace TestingPlatform.DAL.Entities
         public AnswerOptionEntity AnswerOption { get; set; } = default!;
     }
 }
+ 
