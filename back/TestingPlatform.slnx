@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="TestingPlatform.BLL/TestingPlatform.BLL.csproj" Id="e296d809-0fb0-478a-bc64-0c09037f9a6a" />
-  <Project Path="TestingPlatform.DAL/TestingPlatform.DAL.csproj" Id="ef7bb533-3ed1-4140-8ee0-951b4ed8ef4c" />
+  <Project Path="TestingPlatform.BLL/TestingPlatform.BLL.csproj" />
+  <Project Path="TestingPlatform.DAL/TestingPlatform.DAL.csproj" />
   <Project Path="TestingPlatform/TestingPlatform.csproj" />
 </Solution>
