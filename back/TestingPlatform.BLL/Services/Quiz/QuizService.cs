@@ -36,6 +36,8 @@ namespace TestingPlatform.BLL.Services.Quiz
                 };
             }
 
+            entity.SharedCode = Guid.NewGuid().ToString(); 
+
             entity.Owner = user;
 
             await _quizRepository.CreateAsync(entity);  
@@ -124,6 +126,28 @@ namespace TestingPlatform.BLL.Services.Quiz
             return new ServiceResponse
             {
                 Message = $"Тест з id '{id}' знайдено",
+                IsSuccess = true,
+                Payload = dto
+            };
+        }
+        public async Task<ServiceResponse> GetBySharedCodeAsync(string code)
+        {
+            var entity = _quizRepository.GetBySharedCodeAsync(code);
+            if (entity == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = $"Тест з SharedCode '{code}' не знайдено"
+                };
+            }
+
+            var dto = _mapper.Map<QuizDto>(entity);
+
+            return new ServiceResponse
+            {
+                Message = $"Тест з SharedCode '{code}' не знайдено",
                 IsSuccess = true,
                 Payload = dto
             };
