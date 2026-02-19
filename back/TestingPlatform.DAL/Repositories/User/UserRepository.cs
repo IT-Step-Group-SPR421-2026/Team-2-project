@@ -20,6 +20,11 @@ namespace TestingPlatform.DAL.Repositories.User
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<UserEntity?> GetByNameAsync(string name)
+        {
+            return await Users
+                .FirstOrDefaultAsync(u => u.Name == name);
+        }
 
 
     }
