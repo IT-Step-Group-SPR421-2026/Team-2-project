@@ -1,4 +1,5 @@
 ﻿using TestingPlatform.BLL.Dto.Qiuz;
+using TestingPlatform.DAL.Entities;
 
 namespace TestingPlatform.BLL.Services.Quiz
 {
@@ -9,5 +10,6 @@ namespace TestingPlatform.BLL.Services.Quiz
         Task<ServiceResponse> DeleteAsync(string id);
         Task<ServiceResponse> GetAllAsync();
         Task<ServiceResponse> GetByIdAsync(string id);
+        Task<ServiceResponse> GetBySharedCodeAsync(string code);
     }
 }
