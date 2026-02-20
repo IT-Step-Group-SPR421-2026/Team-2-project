@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 4rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #2d6a5f;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.logo span {
+  color: #5ab09a;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.65rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #2d6a5f;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #245a4f;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: white;
+  color: #2d6a5f;
+  border: 1.5px solid #2d6a5f;
+}
+
+.btn-secondary:hover {
+  background: #f0f7f5;
+}

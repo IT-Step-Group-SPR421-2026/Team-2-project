@@ -1,0 +1,40 @@
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  padding: 1rem 3.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+}
+
+.action-btn:first-child {
+  background: #2d6a5f;
+  color: white;
+}
+
+.action-btn:first-child:hover {
+  background: #245a4f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(45, 106, 95, 0.3);
+}
+
+.action-btn:last-child {
+  background: white;
+  color: #2d6a5f;
+  border-color: #2d6a5f;
+}
+
+.action-btn:last-child:hover {
+  background: #f0f7f5;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(45, 106, 95, 0.15);
+}
