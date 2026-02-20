@@ -12,7 +12,7 @@ namespace TestingPlatform.BLL.Dto.Auth
         [Required(ErrorMessage = "Поле 'Name' є обов'язковим")]
         public required string Name { get; set; }
         [Required(ErrorMessage = "Поле 'Password' є обов'язковим")]
-        public required string HashPassword { get; set; }
+        public required string Password { get; set; }
         [Required(ErrorMessage = "Поле 'Email' є обов'язковим")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Поле 'Role' є обов'язковим")]
