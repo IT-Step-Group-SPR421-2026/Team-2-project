@@ -11,6 +11,8 @@ namespace TestingPlatform.DAL.Repositories.User
 
         Task<bool> ExistsByEmailAsync(string email);
 
+        Task<UserEntity?> GetByNameAsync(string name);
+
 
     }
 }

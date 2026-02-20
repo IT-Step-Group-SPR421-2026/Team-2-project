@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestingPlatform.DAL.Entities;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace TestingPlatform.DAL
 {
     public class AppDbContext : DbContext

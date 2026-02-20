@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using TestingPlatform.BLL.Dto;
 using TestingPlatform.BLL.Dto.Auth;
-using TestingPlatform.DAL.Entities.Identity;
+using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.User;
 
 
 namespace TestingPlatform.BLL.Services.Auth
 {
-    internal class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
-        private readonly UserManager<ApplicationUser>? _userManager;
-        private readonly IUserRepository UserRepository;
+        private readonly IUserRepository _UserRepository;
+        private readonly PasswordHasher<UserEntity> _hasher = new();
+
+        public AuthService( IUserRepository userRepository)
+        {
+
+            _UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        }
+
         public async Task<ServiceResponse> LoginAsync(LoginDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Name);
+
+
+            var user = await _UserRepository.GetByNameAsync(dto.Name);
 
             if (user == null)
             {
@@ -31,9 +41,9 @@ namespace TestingPlatform.BLL.Services.Auth
                 };
             }
 
-            bool passwordResult = await _userManager.CheckPasswordAsync(user, dto.HashPassword);
+            var result = _hasher.VerifyHashedPassword(user, user.HashPassword, dto.Password);
 
-            if (!passwordResult)
+            if (result == PasswordVerificationResult.Failed)
             {
                 return new ServiceResponse
                 {
@@ -56,6 +66,7 @@ namespace TestingPlatform.BLL.Services.Auth
 
         public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
         {
+
             if (dto == null)
             {
                 return new ServiceResponse
@@ -66,14 +77,20 @@ namespace TestingPlatform.BLL.Services.Auth
                 };
             }
 
-            var user = new ApplicationUser
+
+
+            var user = new UserEntity
             {
+                Id = Guid.NewGuid().ToString(),
                 Email = dto.Email,
-                UserName = dto.Name,
-                EmailConfirmed = true
+                Name = dto.Name,
+                Role = dto.Role
+
+
             };
 
-            if (!await UserRepository.ExistsByEmailAsync(user.Email))
+
+            if (await _UserRepository.ExistsByEmailAsync(user.Email))
             {
                 return new ServiceResponse
                 {
@@ -82,9 +99,10 @@ namespace TestingPlatform.BLL.Services.Auth
                     Message = "Вже є такий акаунт"
                 };
             }
-            await _userManager!.CreateAsync(user, dto.Password);
+            var hash = _hasher.HashPassword(user, dto.Password);
+            user.HashPassword = hash;
 
-            await _userManager.AddToRoleAsync(user, dto.Role);
+            await _UserRepository.CreateAsync(user);
 
             return new ServiceResponse
             {

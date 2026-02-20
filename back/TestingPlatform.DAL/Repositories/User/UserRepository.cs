@@ -5,9 +5,11 @@ namespace TestingPlatform.DAL.Repositories.User
 {
     public class UserRepository : GenericRepository<UserEntity>, IUserRepository
     {
-        public UserRepository(AppDbContext context) : base(context){}
+        public UserRepository(AppDbContext context)
+            : base(context)
+        {}
 
-        public IQueryable<UserEntity> Users => throw new NotImplementedException();
+        public IQueryable<UserEntity> Users => _context.Users;
 
         public Task<bool> ExistsByEmailAsync(string email)
         {

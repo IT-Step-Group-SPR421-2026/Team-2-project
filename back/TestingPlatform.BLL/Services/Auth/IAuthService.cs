@@ -7,7 +7,7 @@ using TestingPlatform.BLL.Dto.Auth;
 
 namespace TestingPlatform.BLL.Services.Auth
 {
-    internal interface IAuthService
+    public interface IAuthService
     {
         Task<ServiceResponse>   LoginAsync(LoginDto dto);
         Task<ServiceResponse> RegisterAsync(RegisterDto dto);

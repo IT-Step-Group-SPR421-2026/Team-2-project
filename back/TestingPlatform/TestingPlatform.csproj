@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TestingPlatform.BLL\TestingPlatform.BLL.csproj" />
     <ProjectReference Include="..\TestingPlatform.DAL\TestingPlatform.DAL.csproj" />
   </ItemGroup>
