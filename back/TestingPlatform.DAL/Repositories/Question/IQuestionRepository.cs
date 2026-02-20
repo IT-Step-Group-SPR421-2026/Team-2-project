@@ -5,5 +5,6 @@ namespace TestingPlatform.DAL.Repositories.Question
     public interface IQuestionRepository : IGenericRepository<QuestionEntity>
     {
         IQueryable<QuestionEntity> Questions { get; }
+        IQueryable<QuestionEntity> GetQuestionsByQiuzIdAsync(string QuizId);
     }
 }

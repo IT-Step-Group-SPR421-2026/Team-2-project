@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using TestingPlatform.DAL.Entities;
 
 namespace TestingPlatform.BLL.Services
 {
@@ -8,5 +9,6 @@ namespace TestingPlatform.BLL.Services
         public bool IsSuccess { get; set; } = true;
         public object? Payload { get; set; } = null;
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
+
     }
 }
