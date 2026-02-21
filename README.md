@@ -54,9 +54,9 @@ dotnet run
 | Name | Role | GitHub |
 |------|------|--------|
 | Illya | Frontend | [@da2045](http://github.com/da2045) |
-| Vyacheslav | Backend | [@SlavaMokrynskyi](https://github.com/SlavaMokrynskyi) |
-| Maksym | Fullstack | [@What-Wh](https://github.com/What-Wh) |
-| Bogdan | Fullstack | [@SSkk999](https://github.com/SSkk999) |
+| Vyacheslav | Fullstack & Teamlead | [@SlavaMokrynskyi](https://github.com/SlavaMokrynskyi) |
+| Maksym | Backend | [@What-Wh](https://github.com/What-Wh) |
+| Bogdan | Backend | [@SSkk999](https://github.com/SSkk999) |
 
 ---
 
