@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using TestingPlatform.BLL.Services.Attempt;
+using TestingPlatform.BLL.Services.Auth;
 using TestingPlatform.BLL.Services.Question;
 using TestingPlatform.BLL.Services.Quiz;
 using TestingPlatform.DAL;
@@ -11,6 +13,7 @@ using TestingPlatform.DAL.Repositories.Attempt;
 using TestingPlatform.DAL.Repositories.Question;
 using TestingPlatform.DAL.Repositories.Quiz;
 using TestingPlatform.DAL.Repositories.User;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -31,11 +34,14 @@ builder.Services.AddScoped<IAttemptRepository, AttemptRepository>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IAttemptService, AttemptService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddAutoMapper(options =>
+{
+    options.LicenseKey = builder.Configuration["Automapper:LicenseKey"];
+}, AppDomain.CurrentDomain.GetAssemblies());
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

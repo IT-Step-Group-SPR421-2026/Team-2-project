@@ -6,7 +6,7 @@ namespace TestingPlatform.DAL.Repositories
     public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : class, IBaseEntity
     {
-        private readonly AppDbContext _context;
+        protected readonly AppDbContext _context;
 
         public GenericRepository(AppDbContext context)
         {
