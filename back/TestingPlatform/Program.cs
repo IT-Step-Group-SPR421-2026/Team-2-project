@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using TestingPlatform.BLL.Services.Attempt;
 using TestingPlatform.BLL.Services.Question;
 using TestingPlatform.BLL.Services.Quiz;
 using TestingPlatform.DAL;
@@ -29,7 +30,7 @@ builder.Services.AddScoped<IAttemptRepository, AttemptRepository>();
 // Add Services
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-
+builder.Services.AddScoped<IAttemptService, AttemptService>();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()

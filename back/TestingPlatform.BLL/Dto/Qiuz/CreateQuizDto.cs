@@ -11,9 +11,6 @@ namespace TestingPlatform.BLL.Dto.Qiuz
         [Required(ErrorMessage = "Опис тесту має бути обо'язково")]
         public required string Description { get; set; } = default!;
         public bool isPublic { get; set; }
-        [Required(ErrorMessage = "Код тесту має бути обо'язково"),
-            MaxLength(10, ErrorMessage = "Повинно бути максимум 10 символів")]
-        public required string SharedCode { get; set; } = default!;
         public int? TimeLimitSeconds { get; set; } = null;
         [Required(ErrorMessage = "Власник тесту має бути обо'язково")]
         public required string OwnerId { get; set; } = default!;
