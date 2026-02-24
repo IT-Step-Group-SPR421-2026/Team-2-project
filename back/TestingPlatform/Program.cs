@@ -20,6 +20,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddAutoMapper(options =>
+{
+    options.LicenseKey = builder.Configuration["Automapper:LicenseKey"];
+}, AppDomain.CurrentDomain.GetAssemblies());
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultDb"))
 );
@@ -44,6 +51,9 @@ builder.Services.AddAutoMapper(options =>
 
 
 var app = builder.Build();
+
+
+
 
 if (app.Environment.IsDevelopment())
 {
