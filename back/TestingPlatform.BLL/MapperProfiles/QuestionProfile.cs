@@ -8,8 +8,7 @@ namespace TestingPlatform.BLL.MapperProfiles
     {
         public QuestionProfile()
         {
-            CreateMap<CreateQuestionDto, QuestionEntity>()
-                .ForMember(dest => dest.QuizId, opt => opt.Ignore());
+            CreateMap<CreateQuestionDto, QuestionEntity>();
 
             CreateMap<UpdateQuestionDto, QuestionEntity>()
                 .ForMember(dest => dest.QuizId, opt => opt.Ignore());
