@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using TestingPlatform.BLL.Services.Attempt;
 using TestingPlatform.BLL.Services.Question;
@@ -16,6 +17,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddAutoMapper(options =>
+{
+    options.LicenseKey = builder.Configuration["Automapper:LicenseKey"];
+}, AppDomain.CurrentDomain.GetAssemblies());
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultDb"))
@@ -38,6 +46,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
+
+
+
 
 if (app.Environment.IsDevelopment())
 {

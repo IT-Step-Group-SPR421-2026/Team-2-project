@@ -11,10 +11,10 @@ namespace TestingPlatform.BLL.Services.Attempt
 {
     public class AttemptService : IAttemptService
     {
-        private readonly AttemptRepository _attemptRepository;
-        private readonly Mapper _mapper;
+        private readonly IAttemptRepository _attemptRepository;
+        private readonly IMapper _mapper;
 
-        public AttemptService(AttemptRepository attemptRepository, Mapper mapper)
+        public AttemptService(IAttemptRepository attemptRepository, IMapper mapper)
         {
             _attemptRepository = attemptRepository;
             _mapper = mapper;
