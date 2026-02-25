@@ -9,8 +9,6 @@ namespace TestingPlatform.BLL.MapperProfiles
         public AttemptProfile() 
         {
             CreateMap<CreateAttemptDto, AttemptEntity>()
-                .ForMember(dest => dest.QuizId, opt => opt.Ignore())
-                .ForMember(dest => dest.UserId, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.Ignore());
 
             CreateMap<UpdateAttemptDto, AttemptEntity>()
