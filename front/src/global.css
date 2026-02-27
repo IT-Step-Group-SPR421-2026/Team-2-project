@@ -16,6 +16,10 @@
   --color-focus-ring: rgba(45, 106, 95, 0.2);
   --color-danger: #c1121f;
   --color-danger-soft: #fff1f2;
+  --color-success: #0b6a4c;
+  --color-success-soft: rgba(11, 106, 76, 0.12);
+  --color-warning: #8a6b1d;
+  --color-warning-soft: rgba(138, 107, 29, 0.13);
 
   --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.05);
   --shadow-hero: 0 2px 10px rgba(45, 74, 68, 0.1);
