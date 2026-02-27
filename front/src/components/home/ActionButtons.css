@@ -1,0 +1,31 @@
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  padding: 1rem 3.5rem;
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+  border: 2px solid transparent;
+  background: var(--color-surface);
+  color: var(--color-brand);
+  border-color: var(--color-border-brand);
+}
+
+.action-btn:hover {
+  background: var(--color-surface-soft);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+}
+
+.action-btn:active {
+  transform: translateY(-1px);
+  filter: brightness(0.95);
+}

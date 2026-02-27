@@ -1,0 +1,60 @@
+.tests-catalog {
+  width: min(1100px, 94vw);
+  margin: 2rem auto 2.5rem;
+  padding: 1.2rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.tests-catalog-title {
+  margin: 0 0 1rem;
+  color: var(--color-brand);
+  font-size: 2rem;
+}
+
+.tests-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.tests-search-label {
+  color: var(--color-brand-muted);
+  font-size: 0.87rem;
+  font-weight: 600;
+}
+
+.tests-search-input {
+  width: min(420px, 100%);
+  padding: 0.72rem 0.85rem;
+  border: 1.5px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-brand);
+  transition: var(--transition-fast);
+}
+
+.tests-search-input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-focus);
+}
+
+.tests-catalog-state {
+  margin: 0;
+  color: var(--color-brand-muted);
+  font-size: 1rem;
+}
+
+.tests-catalog-error {
+  color: var(--color-danger);
+}
+
+.tests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}

@@ -1,0 +1,38 @@
+.test-placeholder {
+  width: min(680px, 92vw);
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-surface-card);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.test-placeholder-title {
+  margin: 0 0 0.8rem;
+  color: var(--color-brand);
+  font-size: 2rem;
+}
+
+.test-placeholder-description {
+  margin: 0 0 1rem;
+  color: var(--color-brand-muted);
+  line-height: 1.55;
+}
+
+.test-placeholder-meta {
+  margin-bottom: 1rem;
+  color: var(--color-brand-soft);
+  font-weight: 600;
+}
+
+.test-placeholder-link {
+  color: var(--color-brand);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.test-placeholder-link:hover {
+  text-decoration: underline;
+}

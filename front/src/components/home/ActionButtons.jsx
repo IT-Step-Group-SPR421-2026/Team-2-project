@@ -3,8 +3,7 @@ import './ActionButtons.css';
 function ActionButtons() {
   return (
     <div className="action-buttons">
-      <button className="action-btn">Конспекти</button>
-      <button className="action-btn">Тести</button>
+      <button className="action-btn">Tests</button>
     </div>
   );
 }
