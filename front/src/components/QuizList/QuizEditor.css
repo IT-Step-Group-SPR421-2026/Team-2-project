@@ -1,0 +1,242 @@
+.quiz-editor {
+  padding: 2rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.editor-header {
+  margin-bottom: 2rem;
+}
+
+.editor-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  margin-bottom: 0.5rem;
+}
+
+.editor-header p {
+  color: var(--color-brand-muted);
+}
+
+.form-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-header);
+  border: 1px solid var(--color-border-soft);
+}
+
+.form-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-brand);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: var(--transition-fast);
+  background: var(--color-surface);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-focus);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: var(--transition-fast);
+  background: var(--color-surface);
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-focus);
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.question-card {
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  border: 1px solid var(--color-border-soft);
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.question-number {
+  font-weight: 600;
+  color: var(--color-brand);
+}
+
+.question-delete {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: var(--transition-fast);
+}
+
+.question-delete:hover {
+  background: var(--color-danger-soft);
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.option-input {
+  flex: 1;
+}
+
+.option-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-brand);
+}
+
+.option-delete {
+  background: none;
+  border: none;
+  color: var(--color-brand-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1.1rem;
+}
+
+.option-delete:hover {
+  color: var(--color-danger);
+}
+
+.add-question-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-surface-soft);
+  border: 2px dashed var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  color: var(--color-brand-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  margin-bottom: 1.5rem;
+}
+
+.add-question-btn:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+  background: var(--color-surface);
+}
+
+.add-option-btn {
+  background: none;
+  border: none;
+  color: var(--color-brand);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  margin-top: 0.5rem;
+}
+
+.add-option-btn:hover {
+  text-decoration: underline;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  color: var(--color-brand-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-cancel:hover {
+  background: var(--color-surface-soft);
+}
+
+.btn-save {
+  padding: 0.75rem 2rem;
+  background: var(--color-brand);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-save:hover {
+  background: var(--color-brand-dark);
+}
+
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

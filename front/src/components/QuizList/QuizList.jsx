@@ -15,7 +15,7 @@ function QuizList() {
     <div className="quiz-list">
       <div className="quiz-list-header">
         <h1>My quiz</h1>
-        <Link to="/create">
+        <Link to="/quizzes/create">
           <button className="create-btn">+ Create quiz</button>
         </Link>
       </div>
