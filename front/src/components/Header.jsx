@@ -5,11 +5,15 @@ function Header() {
   const { pathname } = useLocation();
   const isAuthRoute = pathname === '/login' || pathname === '/register';
   const isTestsRoute = pathname.startsWith('/tests');
+  const isQuizzesRoute = pathname.startsWith('/quizzes');
 
   return (
     <header className="header">
       <div className="header-left">
         <Link to="/" className="logo">Test flow</Link>
+        <Link to="/quizzes" className={`nav-tests-btn${isQuizzesRoute ? ' btn-active' : ''}`}>
+          My Quiz
+        </Link>
         <Link to="/tests" className={`nav-tests-btn${isTestsRoute ? ' btn-active' : ''}`}>
           Tests
         </Link>
