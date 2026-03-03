@@ -44,7 +44,7 @@ namespace TestingPlatform.DAL.Repositories
 
         public Task<TEntity> GetByIdAsync(string id)
         {
-            return _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
+            return _context.Set<TEntity?>().FirstOrDefaultAsync(x => x.Id == id);
         }        
     }
 }
