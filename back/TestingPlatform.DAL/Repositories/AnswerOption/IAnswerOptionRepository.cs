@@ -10,7 +10,7 @@ namespace TestingPlatform.DAL.Repositories.AnswerOption
     public interface IAnswerOptionRepository : IGenericRepository<AnswerOptionEntity>
     {
 
-
+        public IQueryable<AnswerOptionEntity> AnswerOption => GetAll();
         Task<IEnumerable<AnswerOptionEntity>> GetByQuestionIdAsync(string questionId);
     }
 }
