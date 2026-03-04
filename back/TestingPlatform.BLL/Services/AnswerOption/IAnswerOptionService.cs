@@ -7,7 +7,7 @@ using TestingPlatform.BLL.Dto.AnswerOption;
 
 namespace TestingPlatform.BLL.Services.AnswerOption
 {
-    internal interface IAnswerOptionService
+    public  interface IAnswerOptionService
     {
         Task<ServiceResponse> GetByQuestionIdAsync(string questionId);
 
@@ -16,5 +16,8 @@ namespace TestingPlatform.BLL.Services.AnswerOption
         Task<ServiceResponse> CreateAsync(CreateAnswerOptionDto dto);
 
         Task<ServiceResponse> DeleteAsync(string id);
+
+        Task<ServiceResponse> GetAllAsync();
+        Task<ServiceResponse> UpdateAsync(AnswerOptionAdminDto dto);
     }
 }

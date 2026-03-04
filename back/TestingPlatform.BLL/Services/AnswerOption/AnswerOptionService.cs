@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace TestingPlatform.BLL.Services.AnswerOption
                 Message = $"Спроба з id '{questionId}' знайдена",
                 Payload = _mapper.Map<IEnumerable<AnswerOptionDto>>(entities)
             };
-            
+
 
         }
 
@@ -80,6 +81,42 @@ namespace TestingPlatform.BLL.Services.AnswerOption
             return new ServiceResponse
             {
                 Message = $"Елемент по id {id} видалений"
+            };
+        }
+
+        public async Task<ServiceResponse> UpdateAsync(AnswerOptionAdminDto dto)
+        {
+            var entity = await _repository.GetByIdAsync(dto.Id);
+
+            if (entity == null)
+            {
+                return new ServiceResponse
+                {
+
+                    Message = "AnswerOption не знайдено"
+                };
+            }
+
+            entity.Text = dto.Text;
+            entity.isCorrect = dto.IsCorrect;
+
+            await _repository.UpdateAsync(entity);
+
+            return new ServiceResponse
+            {
+                Message = "Обновлено відповідь",
+                Payload = entity
+            };
+        }
+
+        public async Task<ServiceResponse> GetAllAsync()
+        {
+            var entities = await _repository.GetAll().ToListAsync();
+
+            return new ServiceResponse
+            {
+                Message = "Всі варіанти відповідей ",
+                Payload = entities
             };
         }
     }
