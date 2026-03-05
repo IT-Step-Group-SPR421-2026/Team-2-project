@@ -42,15 +42,15 @@ namespace TestingPlatform.Controllers
             return this.ToActionResult(response);
         }
         [HttpGet("by-id")]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] string id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] string id, [FromQuery] string? lang = "")
         {
-            var response = await _quizService.GetByIdAsync(id);
+            var response = await _quizService.GetByIdAsync(id, lang);
             return this.ToActionResult(response);
         }
         [HttpGet("by-shared-code")]
-        public async Task<IActionResult> GetBySharedCodeAsync([FromQuery] string code)
+        public async Task<IActionResult> GetBySharedCodeAsync([FromQuery] string code, [FromQuery] string? lang = "")
         {
-            var response = await _quizService.GetBySharedCodeAsync(code);
+            var response = await _quizService.GetBySharedCodeAsync(code, lang);
             return this.ToActionResult(response);
         }
     }

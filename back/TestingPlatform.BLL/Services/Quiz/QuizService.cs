@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using TestingPlatform.BLL.Dto.Qiuz;
+using TestingPlatform.BLL.Services.Translation;
 using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.Quiz;
 using TestingPlatform.DAL.Repositories.User;
@@ -13,13 +14,15 @@ namespace TestingPlatform.BLL.Services.Quiz
         private readonly IQuizRepository _quizRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly ITranslationService _translationService;
 
 
-        public QuizService(IQuizRepository quizRepository, IMapper mapper, IUserRepository userRepository)
+        public QuizService(IQuizRepository quizRepository, IMapper mapper, IUserRepository userRepository, ITranslationService translationService)
         {
             _quizRepository = quizRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _translationService = translationService;
         }
 
         public async Task<ServiceResponse> CreateAsync(CreateQuizDto dto)
@@ -108,7 +111,7 @@ namespace TestingPlatform.BLL.Services.Quiz
             };
         }
 
-        public async Task<ServiceResponse> GetByIdAsync(string id)
+        public async Task<ServiceResponse> GetByIdAsync(string id, string? lang)
         {
             var entity = await _quizRepository.GetByIdAsync(id);
 
@@ -124,6 +127,11 @@ namespace TestingPlatform.BLL.Services.Quiz
 
             var dto = _mapper.Map<QuizDto>(entity);
 
+            if (lang == "eng")
+            {
+                dto = await _translationService.TranslateObjectAsync(dto);
+            }
+
             return new ServiceResponse
             {
                 Message = $"Тест з id '{id}' знайдено",
@@ -131,7 +139,7 @@ namespace TestingPlatform.BLL.Services.Quiz
                 Payload = dto
             };
         }
-        public async Task<ServiceResponse> GetBySharedCodeAsync(string code)
+        public async Task<ServiceResponse> GetBySharedCodeAsync(string code, string lang)
         {
             var entity = await _quizRepository.GetBySharedCodeAsync(code);
             if (entity == null)
@@ -145,6 +153,11 @@ namespace TestingPlatform.BLL.Services.Quiz
             }
 
             var dto = _mapper.Map<QuizDto>(entity);
+
+            if (lang == "eng")
+            {
+                dto = await _translationService.TranslateObjectAsync(dto);
+            }
 
             return new ServiceResponse
             {

@@ -8,6 +8,7 @@ using TestingPlatform.BLL.Services.Attempt;
 using TestingPlatform.BLL.Services.Auth;
 using TestingPlatform.BLL.Services.Question;
 using TestingPlatform.BLL.Services.Quiz;
+using TestingPlatform.BLL.Services.Translation;
 using TestingPlatform.DAL;
 using TestingPlatform.DAL.Entities.Identity;
 using TestingPlatform.DAL.Initializer;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IAttemptService, AttemptService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient<ITranslationService, TranslationService>();
 
 builder.Services.AddAutoMapper(options =>
 {
