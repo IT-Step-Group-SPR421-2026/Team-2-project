@@ -5,16 +5,24 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import TestsPage from './pages/Tests';
 import TestDetailsPage from './pages/TestDetails';
+import { GuestOnlyRoute, ProtectedRoute } from './routes/ProtectedRoute';
 
 function App() {
   return (
     <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/tests" element={<TestsPage />} />
-        <Route path="/tests/:testId" element={<TestDetailsPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/tests" element={<TestsPage />} />
+          <Route path="/tests/:testId" element={<TestDetailsPage />} />
+        </Route>
+
+        <Route element={<GuestOnlyRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

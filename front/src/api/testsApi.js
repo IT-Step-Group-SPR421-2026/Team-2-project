@@ -29,6 +29,7 @@ export async function getAllTests() {
   const response = await httpClient.get('/api/quiz');
   const payload = response?.data?.payload;
 
+
   if (!Array.isArray(payload)) {
     return [];
   }
