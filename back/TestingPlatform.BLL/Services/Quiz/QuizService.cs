@@ -98,10 +98,15 @@ namespace TestingPlatform.BLL.Services.Quiz
             };
         }
 
-        public async Task<ServiceResponse> GetAllAsync()
+        public async Task<ServiceResponse> GetAllAsync(string lang)
         {
             var entities = await _quizRepository.Quizzes.ToListAsync();
             var  dtoes = _mapper.Map<List<QuizDto>>(entities);
+
+            if(lang == "eng")
+            {
+                dtoes = await _translationService.TranslateRangeOfObjectsAsync(dtoes);
+            }
 
             return new ServiceResponse
             {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Net;
 using TestingPlatform.BLL.Dto.Question;
+using TestingPlatform.BLL.Services.Translation;
 using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.Question;
 
@@ -11,11 +12,13 @@ namespace TestingPlatform.BLL.Services.Question
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IMapper _mapper;
+        private readonly ITranslationService _translationService;
 
-        public QuestionService(IQuestionRepository questionRepository, IMapper mapper)
+        public QuestionService(IQuestionRepository questionRepository, IMapper mapper, ITranslationService translationService)
         {
             _questionRepository = questionRepository;
             _mapper = mapper;
+            _translationService = translationService;
         }
 
         public async Task<ServiceResponse> CreateAsync(CreateQuestionDto dto)
@@ -76,11 +79,16 @@ namespace TestingPlatform.BLL.Services.Question
             };
         }
 
-        public async Task<ServiceResponse> GetAllAsync()
+        public async Task<ServiceResponse> GetAllAsync(string lang)
         {
             var entities = _questionRepository.GetAll().ToList();
 
             var dtos = _mapper.Map<List<QuestionDto>>(entities);
+
+            if (lang == "eng")
+            {
+                dtos = await _translationService.TranslateRangeOfObjectsAsync(dtos);
+            }
 
             return new ServiceResponse
             {
@@ -89,7 +97,7 @@ namespace TestingPlatform.BLL.Services.Question
             };
         }
 
-        public async Task<ServiceResponse> GetByIdAsync(string id)
+        public async Task<ServiceResponse> GetByIdAsync(string id, string lang)
         {
             var entity = _questionRepository.GetByIdAsync(id);
             if (entity == null)
@@ -104,6 +112,11 @@ namespace TestingPlatform.BLL.Services.Question
 
             var dto = _mapper.Map<QuestionDto>(entity);
 
+            if (lang == "eng")
+            {
+                dto = await _translationService.TranslateObjectAsync(dto);
+            }
+
             return new ServiceResponse
             {
                 Message = $"Питання з id '{id}' знайдено",
@@ -111,7 +124,7 @@ namespace TestingPlatform.BLL.Services.Question
             };
         }
 
-        public async Task<ServiceResponse> GetByQuizIdAsync(string quizId)
+        public async Task<ServiceResponse> GetByQuizIdAsync(string quizId, string lang)
         {
             var entities = _questionRepository.GetQuestionsByQiuzIdAsync(quizId).ToList();
 
@@ -126,6 +139,11 @@ namespace TestingPlatform.BLL.Services.Question
             }
 
             var dtos = _mapper.Map<List<QuestionDto>>(entities);
+
+            if(lang == "eng")
+            {
+                dtos = await _translationService.TranslateRangeOfObjectsAsync(dtos);
+            }
 
             return new ServiceResponse
             {

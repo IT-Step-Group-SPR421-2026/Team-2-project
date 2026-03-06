@@ -17,25 +17,25 @@ namespace TestingPlatform.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] string lang)
         {
-            var response = await _answerOptionService.GetAllAsync();
+            var response = await _answerOptionService.GetAllAsync(lang);
             return this.ToActionResult(response);
         }
 
 
         [HttpGet("by-question")]
-        public async Task<IActionResult> GetByQuestionIdAsync(string questionId)
+        public async Task<IActionResult> GetByQuestionIdAsync([FromQuery] string questionId, [FromQuery] string lang)
         {
-            var response = await _answerOptionService.GetByQuestionIdAsync(questionId);
+            var response = await _answerOptionService.GetByQuestionIdAsync(questionId, lang);
             return this.ToActionResult(response);
         }
 
 
         [HttpGet("by-id")]
-        public async Task<IActionResult> GetByIdAsync(string id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] string id, [FromQuery] string lang)
         {
-            var response = await _answerOptionService.GetByIdAsync(id);
+            var response = await _answerOptionService.GetByIdAsync(id, lang);
             return this.ToActionResult(response);
         }
 
@@ -57,7 +57,7 @@ namespace TestingPlatform.Controllers
 
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteAsync(string id)
+        public async Task<IActionResult> DeleteAsync([FromQuery] string id)
         {
             var response = await _answerOptionService.DeleteAsync(id);
             return this.ToActionResult(response);

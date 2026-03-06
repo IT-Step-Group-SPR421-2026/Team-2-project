@@ -41,5 +41,13 @@ namespace TestingPlatform.BLL.Services.Translation
 
             return obj;
         }
+        public async Task<List<T>> TranslateRangeOfObjectsAsync<T>(List<T> objects)
+        {
+            foreach (var obj in objects)
+            {
+                await TranslateObjectAsync(obj);
+            }
+            return objects;
+        }
     }
 }

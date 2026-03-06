@@ -36,9 +36,9 @@ namespace TestingPlatform.Controllers
             return this.ToActionResult(response);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? lang = "")
         {
-            var response = await _quizService.GetAllAsync();
+            var response = await _quizService.GetAllAsync(lang);
             return this.ToActionResult(response);
         }
         [HttpGet("by-id")]
