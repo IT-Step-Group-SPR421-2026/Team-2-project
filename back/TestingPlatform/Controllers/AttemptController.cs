@@ -39,20 +39,20 @@ namespace TestingPlatform.Controllers
         }
 
         [HttpGet("by-id")]
-        public async Task<IActionResult> GetByIdAsync(string id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] string id)
         {
             var response = await _attemptService.GetByIdAsync(id);
             return this.ToActionResult(response);
         }
         [HttpGet("by-user-id")]
-        public async Task<IActionResult> GetByUserIdAsync(string id)
+        public async Task<IActionResult> GetByUserIdAsync([FromQuery] string id)
         {
             var response = await _attemptService.GetByUserIdAsync(id);
             return this.ToActionResult(response);
         }
 
         [HttpGet("by-quiz-id")]
-        public async Task<IActionResult> GetByQiuzIdAsync(string qiuzId)
+        public async Task<IActionResult> GetByQiuzIdAsync([FromQuery] string qiuzId)
         {
             var response = await _attemptService.GetByQuizIdAsync(qiuzId);
             return this.ToActionResult(response);

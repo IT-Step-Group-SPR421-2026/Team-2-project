@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestingPlatform.BLL.Dto.AnswerOption;
+using TestingPlatform.BLL.Services.Translation;
 using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.AnswerOption;
 
@@ -15,38 +16,55 @@ namespace TestingPlatform.BLL.Services.AnswerOption
     {
         private readonly IAnswerOptionRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ITranslationService _translationService;
 
         public AnswerOptionService(
             IAnswerOptionRepository repository,
-            IMapper mapper)
+            IMapper mapper, ITranslationService translationService)
         {
             _repository = repository;
             _mapper = mapper;
+            _translationService = translationService;
         }
 
-        public async Task<ServiceResponse> GetByQuestionIdAsync(string questionId)
+        public async Task<ServiceResponse> GetByQuestionIdAsync(string questionId, string lang)
         {
             var entities = await _repository.GetByQuestionIdAsync(questionId);
+
+            var dtos = _mapper.Map<List<AnswerOptionDto>>(entities);
+
+            if (lang == "eng")
+            {
+                dtos = await _translationService.TranslateRangeOfObjectsAsync(dtos);
+            }
+
             return new ServiceResponse
             {
                 Message = $"Спроба з id '{questionId}' знайдена",
-                Payload = _mapper.Map<IEnumerable<AnswerOptionDto>>(entities)
+                Payload = dtos
             };
 
 
         }
 
-        public async Task<ServiceResponse> GetByIdAsync(string id)
+        public async Task<ServiceResponse> GetByIdAsync(string id, string lang)
         {
             var entity = await _repository.GetByIdAsync(id);
 
             if (entity == null)
                 return null;
 
+            var dto = _mapper.Map<AnswerOptionAdminDto>(entity);
+
+            if (lang == "eng")
+            {
+                dto = await _translationService.TranslateObjectAsync(dto);
+            }
+
             return new ServiceResponse
             {
                 Message = $"Спроба з id '{id}' знайдена",
-                Payload = _mapper.Map<AnswerOptionAdminDto>(entity)
+                Payload = dto
             };
         }
 
@@ -109,14 +127,21 @@ namespace TestingPlatform.BLL.Services.AnswerOption
             };
         }
 
-        public async Task<ServiceResponse> GetAllAsync()
+        public async Task<ServiceResponse> GetAllAsync(string lang)
         {
             var entities = await _repository.GetAll().ToListAsync();
+            
+            var dtos = _mapper.Map<List<AnswerOptionDto>>(entities);
+
+            if (lang == "eng")
+            {
+                dtos = await _translationService.TranslateRangeOfObjectsAsync(dtos);
+            }
 
             return new ServiceResponse
             {
                 Message = "Всі варіанти відповідей ",
-                Payload = entities
+                Payload = dtos
             };
         }
     }

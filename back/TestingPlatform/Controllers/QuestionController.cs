@@ -38,23 +38,23 @@ namespace TestingPlatform.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] string lang)
         {
-            var response = await _questionService.GetAllAsync();
+            var response = await _questionService.GetAllAsync(lang);
             return this.ToActionResult(response);
         }
 
         [HttpGet("by-id")]
-        public async Task<IActionResult> GetByIdAsync(string id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] string id, [FromQuery] string lang)
         {
-            var response = await _questionService.GetByIdAsync(id);
+            var response = await _questionService.GetByIdAsync(id, lang);
             return this.ToActionResult(response);
         }
 
         [HttpGet("by-quiz-id")]
-        public async Task<IActionResult> GetByQiuzIdAsync(string qiuzId)
+        public async Task<IActionResult> GetByQiuzIdAsync([FromQuery] string qiuzId, [FromQuery] string lang)
         {
-            var response = await _questionService.GetByQuizIdAsync(qiuzId);
+            var response = await _questionService.GetByQuizIdAsync(qiuzId, lang);
             return this.ToActionResult(response);
         }
     }

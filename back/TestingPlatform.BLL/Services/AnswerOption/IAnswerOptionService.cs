@@ -9,15 +9,15 @@ namespace TestingPlatform.BLL.Services.AnswerOption
 {
     public  interface IAnswerOptionService
     {
-        Task<ServiceResponse> GetByQuestionIdAsync(string questionId);
+        Task<ServiceResponse> GetByQuestionIdAsync(string questionId, string lang);
 
-        Task<ServiceResponse> GetByIdAsync(string id);
+        Task<ServiceResponse> GetByIdAsync(string id, string lang);
 
         Task<ServiceResponse> CreateAsync(CreateAnswerOptionDto dto);
 
         Task<ServiceResponse> DeleteAsync(string id);
 
-        Task<ServiceResponse> GetAllAsync();
+        Task<ServiceResponse> GetAllAsync(string lang);
         Task<ServiceResponse> UpdateAsync(AnswerOptionAdminDto dto);
     }
 }

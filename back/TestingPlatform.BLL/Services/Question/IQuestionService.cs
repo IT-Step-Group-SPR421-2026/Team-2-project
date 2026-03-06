@@ -7,8 +7,8 @@ namespace TestingPlatform.BLL.Services.Question
         Task<ServiceResponse> CreateAsync(CreateQuestionDto dto);
         Task<ServiceResponse> UpdateAsync(UpdateQuestionDto dto);
         Task<ServiceResponse> DeleteAsync(string id);
-        Task<ServiceResponse> GetAllAsync();
-        Task<ServiceResponse> GetByIdAsync(string id);
-        Task<ServiceResponse> GetByQuizIdAsync(string quizId);
+        Task<ServiceResponse> GetAllAsync(string lang);
+        Task<ServiceResponse> GetByIdAsync(string id, string lang);
+        Task<ServiceResponse> GetByQuizIdAsync(string quizId, string lang);
     }
 }
