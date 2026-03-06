@@ -9,7 +9,7 @@ namespace TestingPlatform.BLL.Services.Quiz
         Task<ServiceResponse> UpdateAsync(UpdateQuizDto dto);
         Task<ServiceResponse> DeleteAsync(string id);
         Task<ServiceResponse> GetAllAsync();
-        Task<ServiceResponse> GetByIdAsync(string id);
-        Task<ServiceResponse> GetBySharedCodeAsync(string code);
+        Task<ServiceResponse> GetByIdAsync(string id, string lang);
+        Task<ServiceResponse> GetBySharedCodeAsync(string code, string lang);
     }
 }
