@@ -1,0 +1,122 @@
+.quiz-list {
+  padding: 2rem 4rem;
+}
+
+.quiz-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.quiz-list-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-brand);
+}
+
+.create-btn {
+  padding: 0.7rem 1.5rem;
+  background: var(--color-brand);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.create-btn:hover {
+  background: var(--color-brand-dark);
+}
+
+.quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.quiz-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-header);
+  border: 1px solid var(--color-border-soft);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.quiz-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--color-brand);
+}
+
+.quiz-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  margin-bottom: 0.5rem;
+}
+
+.quiz-card-info {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-brand-muted);
+  margin-bottom: 1rem;
+}
+
+.quiz-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-card-date {
+  font-size: 0.8rem;
+  color: var(--color-brand-soft);
+}
+
+.quiz-card-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.status-draft {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-brand-muted);
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+}
+
+.empty-state button {
+  padding: 0.7rem 2rem;
+  background: var(--color-brand);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.empty-state button:hover {
+  background: var(--color-brand-dark);
+}

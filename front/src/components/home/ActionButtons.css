@@ -6,6 +6,10 @@
   margin-bottom: 2rem;
 }
 
+.action-buttons a {
+  text-decoration: none;
+}
+
 .action-btn {
   padding: 1rem 3.5rem;
   border-radius: var(--radius-md);

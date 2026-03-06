@@ -1,4 +1,5 @@
 import './Hero.css';
+import ActionButtons from './ActionButtons';
 
 function Hero() {
   return (
@@ -8,6 +9,7 @@ function Hero() {
         A platform for creating and taking tests. Save notes, share knowledge,
         and test your skills.
       </p>
+      <ActionButtons />
     </section>
   );
 }
