@@ -1,22 +1,23 @@
-п»їusing System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using TestingPlatform.DAL.Entities;
 
 namespace TestingPlatform.BLL.Dto.Qiuz
 {
     public class QuizDto
     {
-        [Required(ErrorMessage = "Р†'РјСЏ С‚РµСЃС‚Сѓ РјР°С” Р±СѓС‚Рё РѕР±Рѕ'СЏР·РєРѕРІРѕ"),
-           MaxLength(100, ErrorMessage = "РџРѕРІРёРЅРЅРѕ Р±СѓС‚Рё РјР°РєСЃРёРјСѓРј 100 СЃРёРјРІРѕР»С–РІ")]
+        public string Id { get; set; } = default!;
+        [Required(ErrorMessage = "І'мя тесту має бути обо'язково"),
+           MaxLength(100, ErrorMessage = "Повинно бути максимум 100 символів")]
         public required string Title { get; set; }
 
-        [Required(ErrorMessage = "РћРїРёСЃ С‚РµСЃС‚Сѓ РјР°С” Р±СѓС‚Рё РѕР±Рѕ'СЏР·РєРѕРІРѕ")]
+        [Required(ErrorMessage = "Опис тесту має бути обо'язково")]
         public required string Description { get; set; } = default!;
         public bool isPublic { get; set; }
-        [Required(ErrorMessage = "РљРѕРґ С‚РµСЃС‚Сѓ РјР°С” Р±СѓС‚Рё РѕР±Рѕ'СЏР·РєРѕРІРѕ"),
-            MaxLength(10, ErrorMessage = "РџРѕРІРёРЅРЅРѕ Р±СѓС‚Рё РјР°РєСЃРёРјСѓРј 10 СЃРёРјРІРѕР»С–РІ")]
+        [Required(ErrorMessage = "Код тесту має бути обо'язково"),
+            MaxLength(10, ErrorMessage = "Повинно бути максимум 10 символів")]
         public required string SharedCode { get; set; } = default!;
         public int? TimeLimitSeconds { get; set; } = null;
-        [Required(ErrorMessage = "Р’Р»Р°СЃРЅРёРє С‚РµСЃС‚Сѓ РјР°С” Р±СѓС‚Рё РѕР±Рѕ'СЏР·РєРѕРІРѕ")]
+        [Required(ErrorMessage = "Власник тесту має бути обо'язково")]
         public required string OwnerId { get; set; } = default!;
         public DateTime ReleaseDate { get; internal set; }
         public virtual ICollection<QuestionEntity> Questions { get; set; } = [];
@@ -24,3 +25,4 @@ namespace TestingPlatform.BLL.Dto.Qiuz
 
     }
 }
+

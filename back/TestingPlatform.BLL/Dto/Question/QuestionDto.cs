@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using TestingPlatform.DAL.Entities;
 
 namespace TestingPlatform.BLL.Dto.Question
 {
     public class QuestionDto
     {
+        public string Id { get; set; } = default!;
         [Required]
         public string Text { get; set; } = default!;
 
@@ -18,3 +19,4 @@ namespace TestingPlatform.BLL.Dto.Question
         public virtual ICollection<AnswerAttemptEntity> AnswerAttempts { get; set; } = [];
     }
 }
+
