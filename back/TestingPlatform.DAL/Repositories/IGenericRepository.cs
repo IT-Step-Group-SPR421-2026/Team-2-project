@@ -9,7 +9,7 @@ namespace TestingPlatform.DAL.Repositories
         Task CreateRangeAsync(params TEntity[] entitties);
         Task DeleteAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
-        Task<TEntity> GetByIdAsync(string id);
+        Task<TEntity?> GetByIdAsync(string id);
         IQueryable<TEntity> GetAll();
     }
 }

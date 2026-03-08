@@ -42,9 +42,9 @@ namespace TestingPlatform.DAL.Repositories
             return _context.Set<TEntity>().AsNoTracking();
         }
 
-        public Task<TEntity> GetByIdAsync(string id)
+        public Task<TEntity?> GetByIdAsync(string id)
         {
-            return _context.Set<TEntity?>().FirstOrDefaultAsync(x => x.Id == id);
+            return _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
         }        
     }
 }

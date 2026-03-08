@@ -10,11 +10,13 @@ namespace TestingPlatform.DAL
 
         public DbSet<UserEntity> Users => Set<UserEntity>();
         public DbSet<QuizEntity> Quizzes => Set<QuizEntity>();
+        public DbSet<CommentsEntity> Comments => Set<CommentsEntity>();
         public DbSet<QuestionEntity> Questions => Set<QuestionEntity>();
         public DbSet<AttemptEntity> Attempts => Set<AttemptEntity>();
         public DbSet<AnswerAttemptEntity> AnswerAttempts => Set<AnswerAttemptEntity>();
         public DbSet<AnswerOptionEntity> AnswerOptions => Set<AnswerOptionEntity>();
         public DbSet<AnswerAttemptOptionEntity> AnswerAttemptOptions => Set<AnswerAttemptOptionEntity>();
+ 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -152,6 +154,25 @@ namespace TestingPlatform.DAL
                         join.ToTable("AnswerAttemptOptions");
                         join.HasKey(x => new { x.AnswerAttemptId, x.AnswerOptionId });
                     });
+             // -------------------------
+             // Comment
+             // -------------------------
+             modelBuilder.Entity<CommentsEntity>(e =>
+                 {
+                     e.HasKey(x => x.Id);
+
+                     e.HasOne(x => x.User)
+                      .WithMany(x => x.Comments)
+                      .HasForeignKey(x => x.UserId)
+                      .IsRequired()
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                     e.HasOne(x => x.Quiz)
+                      .WithMany(x => x.Comments)
+                      .HasForeignKey(x => x.QuizId)
+                      .IsRequired()
+                      .OnDelete(DeleteBehavior.Restrict);
+                 });
         }
     }
 }
