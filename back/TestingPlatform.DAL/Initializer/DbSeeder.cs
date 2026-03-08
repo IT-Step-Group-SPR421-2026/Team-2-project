@@ -166,7 +166,28 @@ namespace TestingPlatform.DAL.Initializer
                     .Sum(a => a.EarnedPoints);
 
                 db.SaveChanges();
-
+                // ---- Comments ----
+                var comments = new List<CommentsEntity>
+        {
+            new CommentsEntity
+            {
+                Id = Guid.NewGuid().ToString(),
+                QuizId = quiz.Id,
+                UserId = student.Id,
+                Text = "Цей тест був дуже легкий!",
+                CreatedDate = DateTime.UtcNow
+            },
+            new CommentsEntity
+            {
+                Id = Guid.NewGuid().ToString(),
+                QuizId = quiz.Id,
+                UserId = teacher.Id,
+                Text = "Дякую за проходження тесту!",
+                CreatedDate = DateTime.UtcNow
+            }
+        };
+                db.Comments.AddRange(comments);
+                db.SaveChanges();
             }
         }
     }

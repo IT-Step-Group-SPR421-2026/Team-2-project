@@ -23,5 +23,7 @@ namespace TestingPlatform.DAL.Entities
 
         public virtual ICollection<QuestionEntity> Questions { get; set; } = [];
         public virtual ICollection<AttemptEntity> Attempts { get; set; } = [];
+
+        public ICollection<CommentsEntity> Comments { get; set; } = [];
     }
 }
