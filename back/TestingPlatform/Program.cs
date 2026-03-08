@@ -17,6 +17,8 @@ using TestingPlatform.DAL.Repositories.Attempt;
 using TestingPlatform.DAL.Repositories.Question;
 using TestingPlatform.DAL.Repositories.Quiz;
 using TestingPlatform.DAL.Repositories.User;
+using TestingPlatform.DAL.Repositories.Comments;
+using TestingPlatform.BLL.Services.Comments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +45,7 @@ builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAttemptRepository, AttemptRepository>();
 builder.Services.AddScoped<IAnswerAttemptRepository, AnswerAttemptRepository>();
 builder.Services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 // Add Services
 
@@ -53,7 +56,8 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IAttemptService, AttemptService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ITranslationService, TranslationService>();
-
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddAutoMapper(options =>
 {
     options.LicenseKey = builder.Configuration["Automapper:LicenseKey"];

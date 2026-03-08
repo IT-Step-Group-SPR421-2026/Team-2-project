@@ -32,24 +32,6 @@ namespace TestingPlatform.DAL.Repositories.Comments
                                  .OrderByDescending(c => c.UpdatedDate ?? c.CreatedDate)
                                  .ToListAsync();
         }
-        public async Task<CommentsEntity?> RenameCommentAsync(string commentId, string newText)
-        {
 
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-
-            if (comment == null)
-                return null; 
-
-
-            comment.Text = newText;
-
-
-            comment.UpdatedDate = DateTime.UtcNow;
-
-
-            await _context.SaveChangesAsync();
-
-            return comment;
-        }
     }
 }
