@@ -9,6 +9,7 @@ function AuthInputField({
   required = false,
   error = '',
   capsVisible = false,
+  capsLabel = 'CAPS',
   onCapsStateChange,
   onCapsBlur,
 }) {
@@ -44,7 +45,7 @@ function AuthInputField({
             required={required}
           />
           <span className={`auth-caps${capsVisible ? ' auth-caps-visible' : ''}`}>
-            CAPS
+            {capsLabel}
           </span>
         </div>
       ) : (

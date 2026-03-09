@@ -1,4 +1,6 @@
 import httpClient from './httpClient';
+import { getStoredLanguage } from '../utils/language';
+import { getAppText, formatText } from '../utils/i18n';
 
 function getField(source, ...keys) {
   for (const key of keys) {
@@ -38,24 +40,24 @@ function isLikelyEntityId(value) {
   return guidWithDashes.test(normalized) || guidCompact.test(normalized);
 }
 
-function normalizeOption(rawOption, index) {
+function normalizeOption(rawOption, index, text) {
   return {
     id: getField(rawOption, 'id', 'Id') ?? `option-${index + 1}`,
-    text: getField(rawOption, 'text', 'Text') ?? 'Untitled option',
+    text: getField(rawOption, 'text', 'Text') ?? formatText(text.testSession.optionFallbackTitle, { id: index + 1 }),
     isCorrect: Boolean(getField(rawOption, 'isCorrect', 'IsCorrect')),
     orderIndex: Number(getField(rawOption, 'orderIndex', 'OrderIndex') ?? index),
   };
 }
 
-function normalizeQuestion(rawQuestion, index) {
+function normalizeQuestion(rawQuestion, index, text) {
   const rawOptions = getField(rawQuestion, 'answerOptions', 'AnswerOptions');
   const options = Array.isArray(rawOptions)
-    ? rawOptions.map(normalizeOption).sort((a, b) => a.orderIndex - b.orderIndex)
+    ? rawOptions.map((item, itemIndex) => normalizeOption(item, itemIndex, text)).sort((a, b) => a.orderIndex - b.orderIndex)
     : [];
 
   return {
     id: getField(rawQuestion, 'id', 'Id', 'questionId', 'QuestionId') ?? `question-${index + 1}`,
-    text: getField(rawQuestion, 'text', 'Text') ?? `Question ${index + 1}`,
+    text: getField(rawQuestion, 'text', 'Text') ?? formatText(text.testSession.questionFallbackTitle, { id: index + 1 }),
     orderIndex: Number(getField(rawQuestion, 'orderIndex', 'OrderIndex') ?? index),
     quizId: getField(rawQuestion, 'quizId', 'QuizId') ?? '',
     quiz: getField(rawQuestion, 'quiz', 'Quiz') ?? null,
@@ -71,24 +73,26 @@ function normalizeAttempt(rawAttempt, index) {
   };
 }
 
-async function fetchOptionsForQuestion(questionId) {
+async function fetchOptionsForQuestion(questionId, language) {
+  const text = getAppText(language);
   const response = await httpClient.get('/api/answeroption/by-question', {
-    params: { questionId },
+    params: { questionId, lang: language },
   });
   const payload = extractPayload(response);
   const rawOptions = Array.isArray(payload) ? payload : [];
 
-  return rawOptions.map(normalizeOption).sort((a, b) => a.orderIndex - b.orderIndex);
+  return rawOptions.map((item, index) => normalizeOption(item, index, text)).sort((a, b) => a.orderIndex - b.orderIndex);
 }
 
-async function fetchQuestionsByQuizId(quizId) {
+async function fetchQuestionsByQuizId(quizId, language) {
+  const text = getAppText(language);
   const response = await httpClient.get('/api/question/by-quiz-id', {
-    params: { qiuzId: quizId },
+    params: { qiuzId: quizId, lang: language },
   });
   const payload = extractPayload(response);
   const rawQuestions = Array.isArray(payload) ? payload : [];
   const normalizedQuestions = rawQuestions
-    .map(normalizeQuestion)
+    .map((item, index) => normalizeQuestion(item, index, text))
     .sort((a, b) => a.orderIndex - b.orderIndex);
 
   const withOptions = await Promise.all(
@@ -102,7 +106,7 @@ async function fetchQuestionsByQuizId(quizId) {
       }
 
       try {
-        const options = await fetchOptionsForQuestion(question.id);
+        const options = await fetchOptionsForQuestion(question.id, language);
         return { ...question, options };
       } catch {
         return question;
@@ -113,15 +117,18 @@ async function fetchQuestionsByQuizId(quizId) {
   return withOptions;
 }
 
-async function fetchQuestionsBySharedCode(sharedCode) {
+async function fetchQuestionsBySharedCode(sharedCode, language) {
   if (!sharedCode) {
     return [];
   }
 
-  const response = await httpClient.get('/api/question');
+  const text = getAppText(language);
+  const response = await httpClient.get('/api/question', {
+    params: { lang: language },
+  });
   const payload = extractPayload(response);
   const rawQuestions = Array.isArray(payload) ? payload : [];
-  const normalized = rawQuestions.map(normalizeQuestion);
+  const normalized = rawQuestions.map((item, index) => normalizeQuestion(item, index, text));
 
   const filtered = normalized.filter((question) => {
     const quiz = getField(question, 'quiz', 'Quiz');
@@ -132,7 +139,8 @@ async function fetchQuestionsBySharedCode(sharedCode) {
   return filtered.sort((a, b) => a.orderIndex - b.orderIndex);
 }
 
-export async function loadQuizSession({ testId, stateTest }) {
+export async function loadQuizSession({ testId, stateTest, language = getStoredLanguage() }) {
+  const text = getAppText(language);
   const quiz = {
     title: getField(stateTest, 'title', 'Title') ?? '',
     description: getField(stateTest, 'description', 'Description') ?? '',
@@ -156,7 +164,7 @@ export async function loadQuizSession({ testId, stateTest }) {
   if (sharedCodeCandidate) {
     try {
       const byCodeResponse = await httpClient.get('/api/quiz/by-shared-code', {
-        params: { code: sharedCodeCandidate },
+        params: { code: sharedCodeCandidate, lang: language },
       });
       const byCodePayload = extractPayload(byCodeResponse);
       const byCodeQuizId = getField(byCodePayload, 'id', 'Id');
@@ -172,7 +180,7 @@ export async function loadQuizSession({ testId, stateTest }) {
 
       if (Array.isArray(byCodeQuestions) && byCodeQuestions.length > 0) {
         const normalizedQuestions = byCodeQuestions
-          .map(normalizeQuestion)
+          .map((item, index) => normalizeQuestion(item, index, text))
           .sort((a, b) => a.orderIndex - b.orderIndex);
         const questionsWithOptions = await Promise.all(
           normalizedQuestions.map(async (question) => {
@@ -181,7 +189,7 @@ export async function loadQuizSession({ testId, stateTest }) {
             }
 
             try {
-              const options = await fetchOptionsForQuestion(question.id);
+              const options = await fetchOptionsForQuestion(question.id, language);
               return { ...question, options };
             } catch {
               return question;
@@ -208,7 +216,7 @@ export async function loadQuizSession({ testId, stateTest }) {
 
   for (const candidateId of quizIdCandidates) {
     try {
-      const questions = await fetchQuestionsByQuizId(candidateId);
+      const questions = await fetchQuestionsByQuizId(candidateId, language);
       if (questions.length > 0) {
         return {
           quizId: candidateId,
@@ -225,7 +233,7 @@ export async function loadQuizSession({ testId, stateTest }) {
   const sharedCodeFromRouteOrState = quiz.sharedCode || testId;
   if (sharedCodeFromRouteOrState) {
     try {
-      const questionsByCode = await fetchQuestionsBySharedCode(sharedCodeFromRouteOrState);
+      const questionsByCode = await fetchQuestionsBySharedCode(sharedCodeFromRouteOrState, language);
       if (questionsByCode.length > 0) {
         const quizIdFromQuestions = questionsByCode[0]?.quizId ?? '';
         return {

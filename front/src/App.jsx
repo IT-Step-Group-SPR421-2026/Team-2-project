@@ -5,6 +5,7 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import TestsPage from './pages/Tests';
 import TestDetailsPage from './pages/TestDetails';
+import ProfilePage from './pages/Profile';
 import { GuestOnlyRoute, ProtectedRoute } from './routes/ProtectedRoute';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/tests" element={<TestsPage />} />
           <Route path="/tests/:testId" element={<TestDetailsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         <Route element={<GuestOnlyRoute />}>

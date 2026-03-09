@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthInputField from './AuthInputField';
+import { useAppText } from '../../utils/i18n';
+import { HEADER_ROUTES } from '../../constants';
 
 function LoginForm({ submitLabel }) {
+  const { text } = useAppText();
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
@@ -29,7 +32,7 @@ function LoginForm({ submitLabel }) {
     event.preventDefault();
 
     if (!formData.name.trim() || !formData.password) {
-      setErrorMessage('Login and password are required.');
+      setErrorMessage(text.auth.errors.loginRequired);
       return;
     }
 
@@ -39,10 +42,10 @@ function LoginForm({ submitLabel }) {
         name: formData.name.trim(),
         password: formData.password,
       });
-      const nextPath = location.state?.from?.pathname || '/tests';
+      const nextPath = location.state?.from?.pathname || HEADER_ROUTES.TESTS;
       navigate(nextPath, { replace: true });
     } catch (error) {
-      setErrorMessage(error.message || 'Unable to login.');
+      setErrorMessage(error.message || text.auth.errors.unableToLogin);
     } finally {
       setIsSubmitting(false);
     }
@@ -51,7 +54,7 @@ function LoginForm({ submitLabel }) {
   return (
     <form className="auth-form" onSubmit={handleSubmit} noValidate>
       <AuthInputField
-        label="Login"
+        label={text.auth.username}
         name="name"
         type="text"
         value={formData.name}
@@ -60,7 +63,7 @@ function LoginForm({ submitLabel }) {
         required
       />
       <AuthInputField
-        label="Password"
+        label={text.auth.password}
         name="password"
         type="password"
         value={formData.password}
@@ -68,12 +71,13 @@ function LoginForm({ submitLabel }) {
         autoComplete="current-password"
         required
         capsVisible={capsLockOn}
+        capsLabel={text.auth.capsLabel}
         onCapsStateChange={updateCapsLock}
         onCapsBlur={() => setCapsLockOn(false)}
       />
       {errorMessage && <p className="auth-feedback auth-feedback-error">{errorMessage}</p>}
       <button type="submit" className="auth-submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Loading...' : submitLabel}
+        {isSubmitting ? text.auth.loading : submitLabel}
       </button>
     </form>
   );
