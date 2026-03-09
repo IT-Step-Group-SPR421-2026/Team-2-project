@@ -7,6 +7,8 @@ import {
   updateAttemptResult,
 } from '../../api/testSessionApi';
 import './TestPlaceholder.css';
+import { getStoredLanguage, subscribeToLanguageChange } from '../../utils/language';
+import { formatText, useAppText } from '../../utils/i18n';
 
 function haveSameOptions(selectedIds, correctIds) {
   if (selectedIds.length !== correctIds.length) {
@@ -22,6 +24,7 @@ function toPercentage(value) {
 }
 
 function TestPlaceholder() {
+  const { text } = useAppText();
   const { testId } = useParams();
   const location = useLocation();
   const [session, setSession] = useState({
@@ -42,6 +45,11 @@ function TestPlaceholder() {
   const [persistMessage, setPersistMessage] = useState('');
   const [result, setResult] = useState(null);
   const [startedAt, setStartedAt] = useState(Date.now());
+  const [language, setLanguage] = useState(() => getStoredLanguage());
+
+  useEffect(() => {
+    return subscribeToLanguageChange(setLanguage);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -49,29 +57,35 @@ function TestPlaceholder() {
     async function loadSession() {
       setIsLoading(true);
       setErrorMessage('');
+      setAnswers({});
+      setResult(null);
+      setPersistMessage('');
+      setValidationMessage('');
+      setAttempt(null);
 
       try {
         const loadedSession = await loadQuizSession({
           testId,
           stateTest: location.state?.test,
+          language,
         });
         if (!isMounted) {
           return;
         }
-        console.log(loadedSession.quizId)
+
         setSession(loadedSession);
         setStartedAt(Date.now());
 
         if (loadedSession.quizId) {
           const loadedAttempt = await getAttemptByQuizId(loadedSession.quizId);
-          console.log(loadedAttempt)
+
           if (isMounted) {
             setAttempt(loadedAttempt);
           }
         }
       } catch {
         if (isMounted) {
-          setErrorMessage('Unable to load this test right now.');
+          setErrorMessage(text.testSession.loadError);
         }
       } finally {
         if (isMounted) {
@@ -85,9 +99,9 @@ function TestPlaceholder() {
     return () => {
       isMounted = false;
     };
-  }, [location.state?.test, testId]);
+  }, [language, location.state?.test, testId, text.testSession.loadError]);
 
-  const title = session.quiz.title || location.state?.test?.title || `Test ${testId}`;
+  const title = session.quiz.title || location.state?.test?.title || formatText(text.testSession.testFallbackTitle, { id: testId });
   const description = session.quiz.description || location.state?.test?.description || '';
   const sharedCode = session.quiz.sharedCode || location.state?.test?.sharedCode || '';
 
@@ -144,7 +158,7 @@ function TestPlaceholder() {
     });
 
     if (unanswered.length > 0) {
-      setValidationMessage('Answer all questions before submitting.');
+      setValidationMessage(text.testSession.validation);
       return;
     }
 
@@ -200,12 +214,12 @@ function TestPlaceholder() {
           durationSeconds,
         });
 
-        backendStatus = 'Result saved to backend.';
+        backendStatus = text.testSession.persistSaved;
       } catch {
-        backendStatus = 'Result calculated, but backend save failed.';
+        backendStatus = text.testSession.persistFailed;
       }
     } else {
-      backendStatus = 'Result calculated locally. No active backend attempt found for this quiz.';
+      backendStatus = text.testSession.persistLocalOnly;
     }
 
     setPersistMessage(backendStatus);
@@ -227,36 +241,36 @@ function TestPlaceholder() {
       <div className="test-head">
         <h1 className="test-placeholder-title">{title}</h1>
         {description && <p className="test-placeholder-description">{description}</p>}
-        <div className="test-placeholder-meta">Shared code: {sharedCode || 'N/A'}</div>
+        <div className="test-placeholder-meta">{text.testSession.sharedCode}: {sharedCode || text.testCard.noValue}</div>
       </div>
 
       {isLoading ? (
-        <p className="test-placeholder-state">Loading test...</p>
+        <p className="test-placeholder-state">{text.testSession.loading}</p>
       ) : errorMessage ? (
         <p className="test-placeholder-state test-placeholder-error">{errorMessage}</p>
       ) : totalQuestions === 0 ? (
         <p className="test-placeholder-state test-placeholder-error">
-          No questions available for this test.
+          {text.testSession.noQuestions}
         </p>
       ) : result ? (
         <div className="test-results">
-          <h2 className="test-results-title">Your result</h2>
+          <h2 className="test-results-title">{text.testSession.resultTitle}</h2>
           <div className="test-results-grid">
             <article className="test-results-card">
-              <div className="test-results-label">Score</div>
+              <div className="test-results-label">{text.testSession.score}</div>
               <div className="test-results-value">{result.score}/{result.maxScore}</div>
             </article>
             <article className="test-results-card">
-              <div className="test-results-label">Correct answers</div>
+              <div className="test-results-label">{text.testSession.correctAnswers}</div>
               <div className="test-results-value">{result.correctPercent}% ({result.correctCount})</div>
             </article>
             <article className="test-results-card">
-              <div className="test-results-label">Incorrect answers</div>
+              <div className="test-results-label">{text.testSession.incorrectAnswers}</div>
               <div className="test-results-value">{result.incorrectPercent}% ({result.incorrectCount})</div>
             </article>
           </div>
 
-          <p className="test-results-meta">Time spent: {result.durationSeconds} sec</p>
+          <p className="test-results-meta">{formatText(text.testSession.timeSpent, { seconds: result.durationSeconds })}</p>
           {persistMessage && <p className="test-results-meta">{persistMessage}</p>}
 
           <div className="test-results-breakdown">
@@ -267,19 +281,19 @@ function TestPlaceholder() {
               >
                 <h3 className="result-question-title">{index + 1}. {item.questionText}</h3>
                 <p className="result-line">
-                  <strong>Your answer:</strong>{' '}
+                  <strong>{text.testSession.yourAnswer}</strong>{' '}
                   {item.selectedOptions.length > 0
                     ? item.selectedOptions.map((option) => option.text).join(', ')
-                    : 'No answer'}
+                    : text.testSession.noAnswer}
                 </p>
                 <p className="result-line">
-                  <strong>Correct answer:</strong>{' '}
+                  <strong>{text.testSession.correctAnswer}</strong>{' '}
                   {item.correctOptions.length > 0
                     ? item.correctOptions.map((option) => option.text).join(', ')
-                    : 'Not provided by backend'}
+                    : text.testSession.notProvided}
                 </p>
                 <p className="result-line">
-                  <strong>Points:</strong> {item.earnedPoints}
+                  <strong>{text.testSession.points}</strong> {item.earnedPoints}
                 </p>
               </article>
             ))}
@@ -296,7 +310,7 @@ function TestPlaceholder() {
                 <h2 className="test-question-title">{index + 1}. {question.text}</h2>
                 {question.options.length === 0 ? (
                   <p className="test-placeholder-state test-placeholder-error">
-                    No answer options available for this question.
+                    {text.testSession.noOptions}
                   </p>
                 ) : (
                   <div className="test-options">
@@ -333,14 +347,14 @@ function TestPlaceholder() {
 
           <div className="test-actions">
             <button className="test-submit-btn" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit test'}
+              {isSubmitting ? text.testSession.submitting : text.testSession.submit}
             </button>
           </div>
         </form>
       )}
 
       <Link to="/tests" className="test-placeholder-link">
-        Back to all tests
+        {text.testSession.backToTests}
       </Link>
     </section>
   );

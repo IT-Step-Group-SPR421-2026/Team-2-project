@@ -1,4 +1,6 @@
 import httpClient from './httpClient';
+import { getStoredLanguage } from '../utils/language';
+import { formatText, getAppText } from '../utils/i18n';
 
 function getField(source, ...keys) {
   for (const key of keys) {
@@ -10,14 +12,14 @@ function getField(source, ...keys) {
   return undefined;
 }
 
-function normalizeTest(rawTest, index) {
+function normalizeTest(rawTest, index, text) {
   const sharedCode = getField(rawTest, 'sharedCode', 'SharedCode');
   const fallbackId = `test-${index + 1}`;
   const identifier = getField(rawTest, 'id', 'Id') ?? sharedCode ?? fallbackId;
 
   return {
     id: identifier,
-    title: getField(rawTest, 'title', 'Title') ?? 'Untitled test',
+    title: getField(rawTest, 'title', 'Title') ?? formatText(text.testSession.testFallbackTitle, { id: index + 1 }),
     description: getField(rawTest, 'description', 'Description') ?? '',
     isPublic: Boolean(getField(rawTest, 'isPublic', 'IsPublic')),
     sharedCode: sharedCode ?? '',
@@ -25,8 +27,11 @@ function normalizeTest(rawTest, index) {
   };
 }
 
-export async function getAllTests() {
-  const response = await httpClient.get('/api/quiz');
+export async function getAllTests(language = getStoredLanguage()) {
+  const text = getAppText(language);
+  const response = await httpClient.get('/api/quiz', {
+    params: { lang: language },
+  });
   const payload = response?.data?.payload;
 
 
@@ -34,5 +39,5 @@ export async function getAllTests() {
     return [];
   }
 
-  return payload.map(normalizeTest).filter(Boolean);
+  return payload.map((item, index) => normalizeTest(item, index, text)).filter(Boolean);
 }

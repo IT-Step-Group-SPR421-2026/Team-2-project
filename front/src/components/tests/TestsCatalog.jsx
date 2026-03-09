@@ -2,19 +2,31 @@ import { useEffect, useMemo, useState } from 'react';
 import { getAllTests } from '../../api/testsApi';
 import TestCard from './TestCard';
 import './TestsCatalog.css';
+import { getStoredLanguage, subscribeToLanguageChange } from '../../utils/language';
+import { useAppText } from '../../utils/i18n';
 
 function TestsCatalog() {
+  const { text } = useAppText();
   const [tests, setTests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchCode, setSearchCode] = useState('');
+  const [language, setLanguage] = useState(() => getStoredLanguage());
+
+  useEffect(() => {
+    return subscribeToLanguageChange(setLanguage);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadTests() {
+      if (isMounted) {
+        setIsLoading(true);
+      }
+
       try {
-        const data = await getAllTests();
+        const data = await getAllTests(language);
 
         if (!isMounted) {
           return;
@@ -27,7 +39,7 @@ function TestsCatalog() {
           return;
         }
 
-        setErrorMessage('Unable to load tests. Try again later.');
+        setErrorMessage(text.testsCatalog.loadError);
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -40,7 +52,7 @@ function TestsCatalog() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [language, text.testsCatalog.loadError]);
 
   const normalizedQuery = searchCode.trim().toLowerCase();
   const filteredTests = useMemo(() => {
@@ -58,8 +70,8 @@ function TestsCatalog() {
   if (isLoading) {
     return (
       <section className="tests-catalog">
-        <h1 className="tests-catalog-title">Tests</h1>
-        <p className="tests-catalog-state">Loading tests...</p>
+        <h1 className="tests-catalog-title">{text.testsCatalog.title}</h1>
+        <p className="tests-catalog-state">{text.testsCatalog.loading}</p>
       </section>
     );
   }
@@ -67,7 +79,7 @@ function TestsCatalog() {
   if (errorMessage) {
     return (
       <section className="tests-catalog">
-        <h1 className="tests-catalog-title">Tests</h1>
+        <h1 className="tests-catalog-title">{text.testsCatalog.title}</h1>
         <p className="tests-catalog-state tests-catalog-error">{errorMessage}</p>
       </section>
     );
@@ -76,18 +88,18 @@ function TestsCatalog() {
   if (tests.length === 0) {
     return (
       <section className="tests-catalog">
-        <h1 className="tests-catalog-title">Tests</h1>
-        <p className="tests-catalog-state">No tests found.</p>
+        <h1 className="tests-catalog-title">{text.testsCatalog.title}</h1>
+        <p className="tests-catalog-state">{text.testsCatalog.empty}</p>
       </section>
     );
   }
 
   return (
     <section className="tests-catalog">
-      <h1 className="tests-catalog-title">Tests</h1>
+      <h1 className="tests-catalog-title">{text.testsCatalog.title}</h1>
       <div className="tests-search">
         <label className="tests-search-label" htmlFor="tests-shared-code-search">
-          Search by Shared Code
+          {text.testsCatalog.searchLabel}
         </label>
         <input
           id="tests-shared-code-search"
@@ -95,11 +107,11 @@ function TestsCatalog() {
           type="text"
           value={searchCode}
           onChange={(event) => setSearchCode(event.target.value)}
-          placeholder="Enter shared code"
+          placeholder={text.testsCatalog.searchPlaceholder}
         />
       </div>
       {noSearchResults ? (
-        <p className="tests-catalog-state">No tests found for this shared code.</p>
+        <p className="tests-catalog-state">{text.testsCatalog.noSearchResults}</p>
       ) : (
         <div className="tests-grid">
           {filteredTests.map((test) => (

@@ -16,7 +16,7 @@ function getStoredUser() {
     if (!parsed?.name) {
       return null;
     }
-
+    console.log(parsed)
     return parsed;
   } catch {
     return null;

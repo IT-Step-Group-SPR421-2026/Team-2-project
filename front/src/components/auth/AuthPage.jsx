@@ -3,8 +3,11 @@ import AuthCard from './AuthCard';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import './Auth.css';
+import { HEADER_ROUTES } from '../../constants';
+import { useAppText } from '../../utils/i18n';
 
 function AuthPage({ variant }) {
+  const { text } = useAppText();
   const isLogin = variant === 'login';
   const isRegister = variant === 'register';
 
@@ -13,12 +16,12 @@ function AuthPage({ variant }) {
   }
 
   const FormComponent = isLogin ? LoginForm : RegisterForm;
-  const title = isLogin ? 'Login' : 'Register';
-  const description = isLogin ? 'Sign in to continue.' : 'Create your account.';
-  const submitLabel = isLogin ? 'Login' : 'Register';
+  const title = isLogin ? text.auth.loginTitle : text.auth.registerTitle;
+  const description = isLogin ? text.auth.loginDescription : text.auth.registerDescription;
+  const submitLabel = isLogin ? text.auth.loginTitle : text.auth.registerTitle;
   const footerLink = isLogin
-    ? { to: '/register', label: 'No account yet? Register' }
-    : { to: '/login', label: 'Already have an account? Login' };
+    ? { to: HEADER_ROUTES.REGISTER, label: text.auth.noAccount }
+    : { to: HEADER_ROUTES.LOGIN, label: text.auth.alreadyAccount };
 
   return (
     <div>
