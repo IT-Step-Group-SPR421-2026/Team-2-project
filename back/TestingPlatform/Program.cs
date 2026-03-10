@@ -37,6 +37,27 @@ builder.Services.AddAutoMapper(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultDb"))
 );
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+
+{
+
+    options.User.RequireUniqueEmail = true;
+
+    options.Password.RequiredUniqueChars = 0;
+
+    options.Password.RequireNonAlphanumeric = false;
+
+    options.Password.RequireDigit = false;
+
+    options.Password.RequireLowercase = false;
+
+    options.Password.RequireUppercase = false;
+
+    options.Password.RequiredLength = 6;
+
+})
+.AddEntityFrameworkStores<AppDbContext>()  
+.AddDefaultTokenProviders();
 
 // Add repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();

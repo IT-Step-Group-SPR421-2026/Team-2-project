@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TestingPlatform.DAL.Entities;
+using TestingPlatform.DAL.Entities.Identity;
 
 namespace TestingPlatform.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+        ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
+        ApplicationRoleClaim, ApplicationUserToken>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<UserEntity> Users => Set<UserEntity>();
         public DbSet<QuizEntity> Quizzes => Set<QuizEntity>();
@@ -16,19 +20,17 @@ namespace TestingPlatform.DAL
         public DbSet<AnswerAttemptEntity> AnswerAttempts => Set<AnswerAttemptEntity>();
         public DbSet<AnswerOptionEntity> AnswerOptions => Set<AnswerOptionEntity>();
         public DbSet<AnswerAttemptOptionEntity> AnswerAttemptOptions => Set<AnswerAttemptOptionEntity>();
- 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             // -------------------------
-            // User
+            // UserEntity
             // -------------------------
             modelBuilder.Entity<UserEntity>(e =>
             {
                 e.HasKey(x => x.Id);
-
                 e.HasIndex(x => x.Email).IsUnique();
 
                 e.HasMany(x => x.Quizes)
@@ -40,15 +42,19 @@ namespace TestingPlatform.DAL
                  .WithOne(x => x.User)
                  .HasForeignKey(x => x.UserId)
                  .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasMany(x => x.Comments)
+                 .WithOne(x => x.User)
+                 .HasForeignKey(x => x.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);
             });
 
             // -------------------------
-            // Quiz
+            // QuizEntity
             // -------------------------
             modelBuilder.Entity<QuizEntity>(e =>
             {
                 e.HasKey(x => x.Id);
-
                 e.HasIndex(x => x.SharedCode).IsUnique();
 
                 e.HasMany(x => x.Questions)
@@ -60,10 +66,15 @@ namespace TestingPlatform.DAL
                  .WithOne(x => x.Quiz)
                  .HasForeignKey(x => x.QuizId)
                  .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasMany(x => x.Comments)
+                 .WithOne(x => x.Quiz)
+                 .HasForeignKey(x => x.QuizId)
+                 .OnDelete(DeleteBehavior.Restrict);
             });
 
             // -------------------------
-            // Question
+            // QuestionEntity
             // -------------------------
             modelBuilder.Entity<QuestionEntity>(e =>
             {
@@ -74,34 +85,19 @@ namespace TestingPlatform.DAL
                  .HasForeignKey(x => x.QuizId)
                  .IsRequired()
                  .OnDelete(DeleteBehavior.Cascade);
-            });
 
-            // -------------------------
-            // AnswerOption
-            // -------------------------
-            modelBuilder.Entity<AnswerOptionEntity>(e =>
-            {
-                e.HasKey(x => x.Id);
-
-                e.HasOne(x => x.Question)
-                 .WithMany(x => x.AnswerOptions)
+                e.HasMany(x => x.AnswerOptions)
+                 .WithOne(x => x.Question)
                  .HasForeignKey(x => x.QuestionId)
-                 .IsRequired()
                  .OnDelete(DeleteBehavior.Cascade);
             });
 
             // -------------------------
-            // Attempt
+            // AttemptEntity
             // -------------------------
             modelBuilder.Entity<AttemptEntity>(e =>
             {
                 e.HasKey(x => x.Id);
-
-                e.HasOne(x => x.Quiz)
-                 .WithMany(x => x.Attempts)
-                 .HasForeignKey(x => x.QuizId)
-                 .IsRequired()
-                 .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasOne(x => x.User)
                  .WithMany(x => x.Attempts)
@@ -109,11 +105,17 @@ namespace TestingPlatform.DAL
                  .IsRequired()
                  .OnDelete(DeleteBehavior.Restrict);
 
+                e.HasOne(x => x.Quiz)
+                 .WithMany(x => x.Attempts)
+                 .HasForeignKey(x => x.QuizId)
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Cascade);
+
                 e.Property(x => x.Status).HasConversion<int>();
             });
 
             // -------------------------
-            // AnswerAttempt
+            // AnswerAttemptEntity
             // -------------------------
             modelBuilder.Entity<AnswerAttemptEntity>(e =>
             {
@@ -130,49 +132,91 @@ namespace TestingPlatform.DAL
                  .HasForeignKey(x => x.QuestionId)
                  .IsRequired()
                  .OnDelete(DeleteBehavior.Cascade);
-            });
 
-            // -------------------------
-            // Many-to-Many: AnswerAttempt <-> AnswerOption через AnswerAttemptOptionEntity
-            // -------------------------
-            modelBuilder.Entity<AnswerAttemptEntity>()
-                .HasMany(a => a.AnswerOptions)
-                .WithMany(o => o.AnswerAttempts)
-                .UsingEntity<AnswerAttemptOptionEntity>(
-                    right => right
+                e.HasMany(a => a.AnswerOptions)
+                 .WithMany(o => o.AnswerAttempts)
+                 .UsingEntity<AnswerAttemptOptionEntity>(
+                    j => j
                         .HasOne(x => x.AnswerOption)
                         .WithMany()
                         .HasForeignKey(x => x.AnswerOptionId)
                         .OnDelete(DeleteBehavior.Cascade),
-                    left => left
+                    j => j
                         .HasOne(x => x.AnswerAttempt)
                         .WithMany()
                         .HasForeignKey(x => x.AnswerAttemptId)
                         .OnDelete(DeleteBehavior.Cascade),
-                    join =>
+                    j =>
                     {
-                        join.ToTable("AnswerAttemptOptions");
-                        join.HasKey(x => new { x.AnswerAttemptId, x.AnswerOptionId });
+                        j.ToTable("AnswerAttemptOptions");
+                        j.HasKey(x => new { x.AnswerAttemptId, x.AnswerOptionId });
                     });
-             // -------------------------
-             // Comment
-             // -------------------------
-             modelBuilder.Entity<CommentsEntity>(e =>
-                 {
-                     e.HasKey(x => x.Id);
+            });
 
-                     e.HasOne(x => x.User)
-                      .WithMany(x => x.Comments)
-                      .HasForeignKey(x => x.UserId)
-                      .IsRequired()
-                      .OnDelete(DeleteBehavior.Cascade);
+            // -------------------------
+            // CommentsEntity
+            // -------------------------
+            modelBuilder.Entity<CommentsEntity>(e =>
+            {
+                e.HasKey(x => x.Id);
 
-                     e.HasOne(x => x.Quiz)
-                      .WithMany(x => x.Comments)
-                      .HasForeignKey(x => x.QuizId)
-                      .IsRequired()
-                      .OnDelete(DeleteBehavior.Restrict);
-                 });
+                e.HasOne(x => x.User)
+                 .WithMany(x => x.Comments)
+                 .HasForeignKey(x => x.UserId)
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Quiz)
+                 .WithMany(x => x.Comments)
+                 .HasForeignKey(x => x.QuizId)
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // -------------------------
+            // Identity (ApplicationUser/ApplicationRole)
+            // -------------------------
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                // Claims
+                b.HasMany(u => u.Claims)
+                 .WithOne(c => c.User)           
+                 .HasForeignKey(c => c.UserId)   
+                 .IsRequired();
+
+                // Logins
+                b.HasMany(u => u.Logins)
+                 .WithOne(l => l.User)
+                 .HasForeignKey(l => l.UserId)
+                 .IsRequired();
+
+                // Tokens
+                b.HasMany(u => u.Tokens)
+                 .WithOne(t => t.User)
+                 .HasForeignKey(t => t.UserId)
+                 .IsRequired();
+
+                // UserRoles
+                b.HasMany(u => u.UserRoles)
+                 .WithOne(ur => ur.User)
+                 .HasForeignKey(ur => ur.UserId)
+                 .IsRequired();
+            });
+
+            modelBuilder.Entity<ApplicationRole>(b =>
+            {
+                // RoleClaims
+                b.HasMany(r => r.RoleClaims)
+                 .WithOne(rc => rc.Role)
+                 .HasForeignKey(rc => rc.RoleId)
+                 .IsRequired();
+
+                // UserRoles
+                b.HasMany(r => r.UserRoles)
+                 .WithOne(ur => ur.Role)
+                 .HasForeignKey(ur => ur.RoleId)
+                 .IsRequired();
+            });
         }
     }
 }

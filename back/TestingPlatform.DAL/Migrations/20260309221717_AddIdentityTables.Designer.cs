@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestingPlatform.DAL;
@@ -11,9 +12,11 @@ using TestingPlatform.DAL;
 namespace TestingPlatform.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260309221717_AddIdentityTables")]
+    partial class AddIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,9 +228,14 @@ namespace TestingPlatform.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RoleId1")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleId1");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
@@ -318,9 +326,14 @@ namespace TestingPlatform.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -340,9 +353,14 @@ namespace TestingPlatform.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
@@ -355,9 +373,19 @@ namespace TestingPlatform.DAL.Migrations
                     b.Property<string>("RoleId")
                         .HasColumnType("text");
 
+                    b.Property<string>("RoleId1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -373,10 +401,15 @@ namespace TestingPlatform.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.Property<string>("Value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
@@ -575,50 +608,70 @@ namespace TestingPlatform.DAL.Migrations
 
             modelBuilder.Entity("TestingPlatform.DAL.Entities.Identity.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationRole", "Role")
-                        .WithMany("RoleClaims")
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationRole", null)
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationRole", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleId1");
 
                     b.Navigation("Role");
                 });
 
             modelBuilder.Entity("TestingPlatform.DAL.Entities.Identity.ApplicationUserClaim", b =>
                 {
-                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
-                        .WithMany("Claims")
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("TestingPlatform.DAL.Entities.Identity.ApplicationUserLogin", b =>
                 {
-                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
-                        .WithMany("Logins")
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("TestingPlatform.DAL.Entities.Identity.ApplicationUserRole", b =>
                 {
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationRole", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RoleId1");
+
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Role");
 
@@ -627,11 +680,15 @@ namespace TestingPlatform.DAL.Migrations
 
             modelBuilder.Entity("TestingPlatform.DAL.Entities.Identity.ApplicationUserToken", b =>
                 {
-                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
-                        .WithMany("Tokens")
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TestingPlatform.DAL.Entities.Identity.ApplicationUser", "User")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

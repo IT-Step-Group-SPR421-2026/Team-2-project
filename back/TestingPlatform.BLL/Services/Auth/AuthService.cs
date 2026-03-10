@@ -1,36 +1,65 @@
-﻿
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using TestingPlatform.BLL.Dto;
 using TestingPlatform.BLL.Dto.Auth;
 using TestingPlatform.DAL.Entities;
-using TestingPlatform.DAL.Repositories.User;
-
+using TestingPlatform.DAL.Entities.Identity;
 
 namespace TestingPlatform.BLL.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository _UserRepository;
-        private readonly PasswordHasher<UserEntity> _hasher = new();
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
-            _UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
+        {
+            if (dto == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "Помилка"
+                };
+            }
+
+            var user = new ApplicationUser
+            {
+                UserName = dto.Name,
+                Email = dto.Email,
+                Name = dto.Name
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (!result.Succeeded)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = string.Join(", ", result.Errors.Select(x => x.Description))
+                };
+            }
+
+            return new ServiceResponse
+            {
+                Message = "Успішна реєстрація"
+            };
         }
 
         public async Task<ServiceResponse> LoginAsync(LoginDto dto)
         {
-
-
-            var user = await _UserRepository.GetByNameAsync(dto.Name);
+            var user = await _userManager.FindByNameAsync(dto.Name);
 
             if (user == null)
             {
@@ -42,9 +71,9 @@ namespace TestingPlatform.BLL.Services.Auth
                 };
             }
 
-            var result = _hasher.VerifyHashedPassword(user, user.HashPassword, dto.Password);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
 
-            if (result == PasswordVerificationResult.Failed)
+            if (!result.Succeeded)
             {
                 return new ServiceResponse
                 {
@@ -54,60 +83,9 @@ namespace TestingPlatform.BLL.Services.Auth
                 };
             }
 
-
-
             return new ServiceResponse
             {
-                Message = "Успішний вхід",
-
-            };
-        }
-
-
-
-        public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
-        {
-
-            if (dto == null)
-            {
-                return new ServiceResponse
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = "Помилка"
-                };
-            }
-
-
-
-            var user = new UserEntity
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = dto.Email,
-                Name = dto.Name,
-                Role = dto.Role
-
-
-            };
-
-
-            if (await _UserRepository.ExistsByEmailAsync(user.Email))
-            {
-                return new ServiceResponse
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = "Вже є такий акаунт"
-                };
-            }
-            var hash = _hasher.HashPassword(user, dto.Password);
-            user.HashPassword = hash;
-
-            await _UserRepository.CreateAsync(user);
-
-            return new ServiceResponse
-            {
-                Message = "Успішна реєстрація"
+                Message = "Успішний вхід"
             };
         }
     }
