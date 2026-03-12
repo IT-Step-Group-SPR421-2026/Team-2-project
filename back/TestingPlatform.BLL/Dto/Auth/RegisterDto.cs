@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TestingPlatform.DAL.Entities;
 
@@ -17,6 +18,7 @@ namespace TestingPlatform.BLL.Dto.Auth
         [Required(ErrorMessage = "Поле 'Email' є обов'язковим")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Поле 'Role' є обов'язковим")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public required Role Role { get; set; }
     }
 }

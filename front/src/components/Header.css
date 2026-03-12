@@ -30,6 +30,8 @@
 .header-nav {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .nav-tests-btn {
@@ -64,6 +66,106 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
+}
+
+.wallet-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.wallet-controls mysten-dapp-kit-connect-button::part(trigger) {
+  min-height: 2.3rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-brand);
+  background: var(--color-brand);
+  color: var(--color-surface);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: none;
+  transition: var(--transition-fast);
+}
+
+.wallet-controls mysten-dapp-kit-connect-button::part(trigger):hover {
+  background: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+  transform: translateY(-1px);
+}
+
+.wallet-controls mysten-dapp-kit-connect-button::part(trigger):active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+.wallet-controls mysten-dapp-kit-connect-button::part(trigger):focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.wallet-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.3rem;
+  padding: 0.42rem 0.72rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(45, 106, 95, 0.24);
+  background: rgba(45, 106, 95, 0.08);
+  color: #1e463f;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.3rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 0.81rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.wallet-btn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.wallet-btn-connect {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-surface);
+}
+
+.wallet-btn-connect:hover:enabled {
+  background: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+.wallet-btn-disconnect {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--color-border-soft);
+  color: var(--color-brand);
+}
+
+.wallet-btn-disconnect:hover:enabled {
+  background: rgba(45, 106, 95, 0.1);
+  border-color: rgba(45, 106, 95, 0.28);
+}
+
+.wallet-error {
+  max-width: 220px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8b2630;
+  line-height: 1.2;
 }
 
 .menu-wrap {
@@ -245,6 +347,22 @@
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .wallet-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wallet-controls mysten-dapp-kit-connect-button::part(trigger) {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wallet-error {
+    width: 100%;
+    text-align: center;
+    max-width: 100%;
   }
 
   .logo {

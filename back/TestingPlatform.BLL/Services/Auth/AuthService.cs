@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestingPlatform.BLL.Dto;
 using TestingPlatform.BLL.Dto.Auth;
+using TestingPlatform.BLL.Dto.User;
 using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.User;
 
@@ -24,6 +25,28 @@ namespace TestingPlatform.BLL.Services.Auth
         {
 
             _UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        }
+
+        private static UserDto MapUserDto(UserEntity user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                SubscriptionStatus = user.SubscriptionStatus,
+                TestLimit = user.TestLimit,
+            };
+        }
+
+        private static int ResolveTestLimit(SubscriptionStatus status)
+        {
+            return status switch
+            {
+                SubscriptionStatus.Premium => SubscriptionPlanLimits.PremiumTestLimit,
+                _ => SubscriptionPlanLimits.StandardTestLimit,
+            };
         }
 
         public async Task<ServiceResponse> LoginAsync(LoginDto dto)
@@ -59,7 +82,7 @@ namespace TestingPlatform.BLL.Services.Auth
             return new ServiceResponse
             {
                 Message = "Успішний вхід",
-
+                Payload = new { User = MapUserDto(user) }
             };
         }
 
@@ -85,7 +108,9 @@ namespace TestingPlatform.BLL.Services.Auth
                 Id = Guid.NewGuid().ToString(),
                 Email = dto.Email,
                 Name = dto.Name,
-                Role = dto.Role
+                Role = dto.Role,
+                SubscriptionStatus = SubscriptionStatus.Standard,
+                TestLimit = ResolveTestLimit(SubscriptionStatus.Standard),
 
 
             };
@@ -107,7 +132,53 @@ namespace TestingPlatform.BLL.Services.Auth
 
             return new ServiceResponse
             {
-                Message = "Успішна реєстрація"
+                Message = "Успішна реєстрація",
+                Payload = new { User = MapUserDto(user) }
+            };
+        }
+
+        public async Task<ServiceResponse> UpdateSubscriptionAsync(UpdateSubscriptionDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.UserId))
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "Некоректні дані для оновлення підписки",
+                };
+            }
+
+            if (!Enum.IsDefined(typeof(SubscriptionStatus), dto.SubscriptionStatus))
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "Некоректний тип підписки",
+                };
+            }
+
+            var user = await _UserRepository.GetByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = "Користувача не знайдено",
+                };
+            }
+
+            user.SubscriptionStatus = dto.SubscriptionStatus;
+            user.TestLimit = ResolveTestLimit(dto.SubscriptionStatus);
+
+            await _UserRepository.UpdateAsync(user);
+
+            return new ServiceResponse
+            {
+                Message = "Підписку оновлено",
+                Payload = new { User = MapUserDto(user) },
             };
         }
     }

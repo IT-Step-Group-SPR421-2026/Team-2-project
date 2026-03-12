@@ -5,6 +5,7 @@ import { LANGUAGE_ENG, LANGUAGE_UKR, getStoredLanguage, setStoredLanguage } from
 import { useEffect, useRef, useState } from 'react';
 import { HEADER_ROUTES, LANGUAGE_LABELS } from '../constants';
 import { useAppText } from '../utils/i18n';
+import { ConnectButton } from '@mysten/dapp-kit-react/ui';
 
 function Header() {
   const { text } = useAppText();
@@ -12,6 +13,8 @@ function Header() {
   const isAuthRoute = pathname === HEADER_ROUTES.LOGIN || pathname === HEADER_ROUTES.REGISTER;
   const isTestsRoute = pathname.startsWith(HEADER_ROUTES.TESTS);
   const isProfileRoute = pathname.startsWith(HEADER_ROUTES.PROFILE);
+  const isSubscriptionRoute = pathname.startsWith(HEADER_ROUTES.SUBSCRIPTION);
+  const subscriptionLabel = text.header.subscription;
   const { isAuthenticated, user, logout } = useAuth();
   const [language, setLanguage] = useState(() => getStoredLanguage());
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
@@ -67,6 +70,10 @@ function Header() {
       </div>
 
       <div className="header-controls">
+        <div className="wallet-controls">
+          <ConnectButton>Connect Wallet</ConnectButton>
+        </div>
+
         <div className="menu-wrap" ref={languageMenuRef}>
           <button
             type="button"
@@ -116,6 +123,13 @@ function Header() {
                   onClick={() => setIsUserMenuOpen(false)}
                 >
                   {text.header.goToProfile}
+                </Link>
+                <Link
+                  to={HEADER_ROUTES.SUBSCRIPTION}
+                  className={`dropdown-link${isSubscriptionRoute ? ' dropdown-item-active' : ''}`}
+                  onClick={() => setIsUserMenuOpen(false)}
+                >
+                  {subscriptionLabel}
                 </Link>
                 <button
                   type="button"

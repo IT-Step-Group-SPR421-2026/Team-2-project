@@ -28,5 +28,12 @@ namespace TestingPlatform.Controllers
             var response = await _authService.RegisterAsync(dto);
             return this.ToActionResult(response);
         }
+
+        [HttpPut("subscription")]
+        public async Task<IActionResult> UpdateSubscriptionAsync([FromBody] UpdateSubscriptionDto dto)
+        {
+            var response = await _authService.UpdateSubscriptionAsync(dto);
+            return this.ToActionResult(response);
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace TestingPlatform.BLL.Services.Auth
     {
         Task<ServiceResponse>   LoginAsync(LoginDto dto);
         Task<ServiceResponse> RegisterAsync(RegisterDto dto);
+        Task<ServiceResponse> UpdateSubscriptionAsync(UpdateSubscriptionDto dto);
 
 
     }
