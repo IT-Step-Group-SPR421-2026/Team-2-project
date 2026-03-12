@@ -3,10 +3,21 @@
 namespace TestingPlatform.DAL.Entities
 {
     public enum Role {
-        Student = 0, 
-        Teacher = 1,
-        Admin = 2
+        User = 0,
+        Admin = 1
     }
+    public enum SubscriptionStatus
+    {
+        Standard = 0,
+        Premium = 1
+    }
+
+    public static class SubscriptionPlanLimits
+    {
+        public const int StandardTestLimit = 2;
+        public const int PremiumTestLimit = 5;
+    }
+
     public class UserEntity : BaseEntity
     {
         [Required, MaxLength(100)]
@@ -20,6 +31,12 @@ namespace TestingPlatform.DAL.Entities
 
         [Required]
         public Role Role { get; set; }
+
+        [Required]
+        public SubscriptionStatus SubscriptionStatus { get; set; }
+
+        [Required]
+        public int TestLimit { get; set; } = SubscriptionPlanLimits.StandardTestLimit;
 
         public virtual ICollection<QuizEntity> Quizes { get; set; } = [];
         public virtual ICollection<AttemptEntity> Attempts { get; set; } = [];

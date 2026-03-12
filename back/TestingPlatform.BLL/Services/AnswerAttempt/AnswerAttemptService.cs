@@ -74,10 +74,19 @@ namespace TestingPlatform.BLL.Services.AnswerAttempt
 
             if (dto.SelectedOptionIds != null && dto.SelectedOptionIds.Any())
             {
-                selectedOptions = await _answerOptionRepository
-                .AnswerOption
-                .Where(x => dto.SelectedOptionIds.Contains(x.Id))
-                .ToListAsync();
+                var optionIds = dto.SelectedOptionIds
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .ToList();
+
+                foreach (var optionId in optionIds)
+                {
+                    var existingOption = await _answerOptionRepository.GetByIdAsync(optionId);
+                    if (existingOption != null)
+                    {
+                        selectedOptions.Add(existingOption);
+                    }
+                }
 
             }
             if (!selectedOptions.Any() && string.IsNullOrWhiteSpace(dto.TextAnswer))

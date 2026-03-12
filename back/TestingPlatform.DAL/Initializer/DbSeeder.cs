@@ -32,7 +32,9 @@ namespace TestingPlatform.DAL.Initializer
                     Name = "Vasya",
                     Email = "vasya@test.com",
                     HashPassword = "123",
-                    Role = Role.Student
+                    Role = Role.User,
+                    SubscriptionStatus = SubscriptionStatus.Standard,
+                    TestLimit = SubscriptionPlanLimits.StandardTestLimit,
                 };
 
                 db.Users.Add(student);
@@ -41,10 +43,12 @@ namespace TestingPlatform.DAL.Initializer
                 var teacher = new UserEntity
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Name = "Teacher",
-                    Email = "teacher@test.com",
-                    HashPassword = "123",
-                    Role = Role.Teacher
+                    Name = "Admin",
+                    Email = "admin@test.com",
+                    HashPassword = "AQAAAAIAAYagAAAAENQ8TowCTLxi6C14qjYXXNChFw1dxUYdqrlOatgLPqPLZNIf6SBkfOpVXpEttueXTQ==",
+                    Role = Role.Admin,
+                    SubscriptionStatus = SubscriptionStatus.Premium,
+                    TestLimit = SubscriptionPlanLimits.PremiumTestLimit,
                 };
 
                 db.Users.Add(teacher);

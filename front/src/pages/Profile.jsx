@@ -1,6 +1,27 @@
 import Header from '../components/Header';
 import { useAuth } from '../context/AuthContext';
 import { useAppText } from '../utils/i18n';
+import { ROLE, SUBSCRIPTION_STATUS } from '../api/userEntity';
+
+function getRoleLabel(value, fallback) {
+  if (value === ROLE.USER) {
+    return 'User';
+  }
+  if (value === ROLE.ADMIN) {
+    return 'Admin';
+  }
+  return fallback;
+}
+
+function getSubscriptionLabel(value, fallback) {
+  if (value === SUBSCRIPTION_STATUS.STANDARD) {
+    return 'Standard';
+  }
+  if (value === SUBSCRIPTION_STATUS.PREMIUM) {
+    return 'Premium';
+  }
+  return fallback;
+}
 
 function ProfilePage() {
   const { text } = useAppText();
@@ -14,6 +35,8 @@ function ProfilePage() {
           <h1 style={{ marginBottom: '0.75rem', color: 'var(--color-brand-dark)' }}>{text.profile.title}</h1>
           <p style={{ color: '#2a5f56' }}><strong>{text.profile.name}:</strong> {user?.name || text.profile.noValue}</p>
           <p style={{ color: '#2a5f56' }}><strong>{text.profile.email}:</strong> {user?.email || text.profile.noValue}</p>
+          <p style={{ color: '#2a5f56' }}><strong>Role:</strong> {getRoleLabel(user?.role, text.profile.noValue)}</p>
+          <p style={{ color: '#2a5f56' }}><strong>Subscription:</strong> {getSubscriptionLabel(user?.subscriptionStatus, text.profile.noValue)}</p>
         </section>
       </main>
     </div>

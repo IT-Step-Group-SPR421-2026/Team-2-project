@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { loginApi, registerApi } from '../api/authApi';
+import { loginApi, registerApi, updateSubscriptionApi } from '../api/authApi';
+import { normalizeUserEntity, ROLE } from '../api/userEntity';
 
 const AUTH_STORAGE_KEY = 'testflow_auth_user';
 
@@ -13,11 +14,7 @@ function getStoredUser() {
     }
 
     const parsed = JSON.parse(raw);
-    if (!parsed?.name) {
-      return null;
-    }
-    console.log(parsed)
-    return parsed;
+    return normalizeUserEntity(parsed);
   } catch {
     return null;
   }
@@ -36,18 +33,48 @@ export function AuthProvider({ children }) {
       isAuthenticated: Boolean(user?.name),
       async login({ name, password }) {
         const response = await loginApi({ name, password });
-        const nextUser = { name, email: '' };
+        const nextUser = normalizeUserEntity(response?.user) ?? {
+          id: '',
+          name,
+          email: '',
+          role: null,
+          subscriptionStatus: null,
+          testLimit: null,
+        };
         setUser(nextUser);
         persistUser(nextUser);
         return response;
       },
       async register({ name, email, password }) {
-        const registerResponse = await registerApi({ name, email, password, role: 0 });
-        await loginApi({ name, password });
-        const nextUser = { name, email };
+        const registerResponse = await registerApi({ name, email, password, role: ROLE.USER });
+        const loginResponse = await loginApi({ name, password });
+        const nextUser =
+          normalizeUserEntity(loginResponse?.user) ??
+          normalizeUserEntity(registerResponse?.user) ?? {
+            id: '',
+            name,
+            email,
+            role: null,
+            subscriptionStatus: null,
+            testLimit: null,
+          };
         setUser(nextUser);
         persistUser(nextUser);
         return registerResponse;
+      },
+      async updateSubscription({ subscriptionStatus }) {
+        if (!user?.id) {
+          throw new Error('User is not authenticated.');
+        }
+
+        const response = await updateSubscriptionApi({
+          userId: user.id,
+          subscriptionStatus,
+        });
+        const nextUser = normalizeUserEntity(response?.user) ?? user;
+        setUser(nextUser);
+        persistUser(nextUser);
+        return response;
       },
       logout() {
         setUser(null);

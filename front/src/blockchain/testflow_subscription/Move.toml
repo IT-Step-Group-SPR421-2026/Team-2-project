@@ -1,0 +1,12 @@
+[package]
+name = "testflow_subscription"
+edition = "2024"         # edition = "legacy" to use legacy (pre-2024) Move
+# license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
+# authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
+
+[dependencies]
+
+# Read more about the package management system options:
+# https://docs.sui.io/guides/developer/sui-101/move-package-management
+[addresses]
+mokrui_nightly_address = '0xfbd51117e6e737f56564a3afd3252a20f142ae6adb936d2ae0bae9ad9a4d91d5'

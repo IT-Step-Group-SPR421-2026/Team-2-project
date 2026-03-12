@@ -35,6 +35,33 @@
   font-weight: 600;
 }
 
+.test-plan-meta {
+  margin-top: 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-soft);
+  background: #ffffff;
+  padding: 0.75rem 0.85rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.test-plan-meta p {
+  margin: 0;
+  color: #2c554c;
+  line-height: 1.35;
+  font-size: 0.92rem;
+}
+
+.test-plan-premium {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.test-plan-link {
+  color: var(--color-brand);
+  font-weight: 700;
+}
+
 .test-placeholder-state {
   padding: 0.9rem 1rem;
   border-radius: var(--radius-sm);
@@ -69,6 +96,42 @@
   color: #24443b;
 }
 
+.test-question-help {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.test-tip-btn {
+  border: 1px solid rgba(45, 106, 95, 0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(45, 106, 95, 0.1);
+  color: #1d463e;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.test-tip-btn:hover:not(:disabled) {
+  background: rgba(45, 106, 95, 0.18);
+}
+
+.test-tip-btn:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.test-tip-message {
+  margin: 0;
+  color: #32665c;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
 .test-options {
   display: grid;
   gap: 0.55rem;
@@ -86,6 +149,10 @@
 
 .test-option-item:hover {
   background: #f2faf7;
+}
+
+.test-option-item-disabled {
+  opacity: 0.65;
 }
 
 .test-option-item input {
@@ -120,6 +187,28 @@
 .test-submit-btn:disabled {
   opacity: 0.7;
   cursor: wait;
+}
+
+.test-secondary-btn {
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--color-brand);
+  font-size: 0.94rem;
+  font-weight: 700;
+  padding: 0.68rem 1.08rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.test-secondary-btn:hover:not(:disabled) {
+  background: rgba(45, 106, 95, 0.1);
+  border-color: rgba(45, 106, 95, 0.32);
+}
+
+.test-secondary-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
 }
 
 .test-results-title {
