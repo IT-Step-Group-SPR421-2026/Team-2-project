@@ -171,5 +171,54 @@ namespace TestingPlatform.BLL.Services.Quiz
                 Payload = dto
             };
         }
+
+        public async Task<ServiceResponse> Like(string id)
+        {
+            var entity = await _quizRepository.GetByIdAsync(id);
+            if (entity == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = $"Тест з id '{id}' не знайдено"
+                };
+            }
+
+            entity.likes += 1;
+
+            await _quizRepository.UpdateAsync(entity);
+
+            return new ServiceResponse
+            {
+                Message = $"Тест '{entity.Title}' сподобався",
+                IsSuccess = true
+            };
+        }
+
+        public async Task<ServiceResponse> Dislike(string id)
+        {
+            var entity = await _quizRepository.GetByIdAsync(id);
+
+            if (entity == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = $"Тест з id '{id}' не знайдено"
+                };
+            }
+
+            entity.dislikes += 1;
+
+            await _quizRepository.UpdateAsync(entity);
+
+            return new ServiceResponse
+            {
+                Message = $"Тест '{entity.Title}' не сподобався",
+                IsSuccess = true
+            };
+        }
     }
 }

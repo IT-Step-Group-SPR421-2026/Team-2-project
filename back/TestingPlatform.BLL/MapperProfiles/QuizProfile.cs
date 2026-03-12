@@ -10,10 +10,14 @@ namespace TestingPlatform.BLL.MapperProfiles
         {
             CreateMap<CreateQuizDto, QuizEntity>()
                 .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+                .ForMember(dest => dest.likes, opt => opt.Ignore())
+                .ForMember(dest => dest.dislikes, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.ReleaseDate.ToUniversalTime()));
 
             CreateMap<UpdateQuizDto, QuizEntity>()
                .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+               .ForMember(dest => dest.likes, opt => opt.Ignore())
+               .ForMember(dest => dest.dislikes, opt => opt.Ignore())
                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.ReleaseDate.ToUniversalTime()));
 
             CreateMap<QuizEntity, QuizDto>();
