@@ -19,6 +19,7 @@ using TestingPlatform.DAL.Repositories.Quiz;
 using TestingPlatform.DAL.Repositories.User;
 using TestingPlatform.DAL.Repositories.Comments;
 using TestingPlatform.BLL.Services.Comments;
+using TestingPlatform.BLL.Services.Crystal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ITranslationService, TranslationService>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<ICrystalService, CrystalService>();
+
 builder.Services.AddAutoMapper(options =>
 {
     options.LicenseKey = builder.Configuration["Automapper:LicenseKey"];

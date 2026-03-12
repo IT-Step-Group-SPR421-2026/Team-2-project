@@ -18,6 +18,8 @@ namespace TestingPlatform.DAL.Entities
         [Required]
         public string HashPassword { get; set; } = default!;
 
+        public int Crystals { get; set; } = 0;
+
         [Required]
         public Role Role { get; set; }
 
