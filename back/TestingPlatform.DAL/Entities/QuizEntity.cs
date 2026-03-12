@@ -17,6 +17,9 @@ namespace TestingPlatform.DAL.Entities
 
         public int? TimeLimitSeconds { get; set; } = null;
 
+        public int likes { get; set; } = 0;
+        public int dislikes { get; set; } = 0;
+
         [Required]
         public string OwnerId { get; set; } = default!;
         public UserEntity Owner { get; set; } = default!; 

@@ -11,5 +11,7 @@ namespace TestingPlatform.BLL.Services.Quiz
         Task<ServiceResponse> GetAllAsync(string lang);
         Task<ServiceResponse> GetByIdAsync(string id, string lang);
         Task<ServiceResponse> GetBySharedCodeAsync(string code, string lang);
+        Task<ServiceResponse> Like(string id);
+        Task<ServiceResponse> Dislike(string id);
     }
 }

@@ -53,5 +53,19 @@ namespace TestingPlatform.Controllers
             var response = await _quizService.GetBySharedCodeAsync(code, lang);
             return this.ToActionResult(response);
         }
+
+        [HttpPost("like")]
+        public async Task<IActionResult> Like([FromQuery] string id)
+        {
+            var response = await _quizService.Like(id);
+            return this.ToActionResult(response);
+        }
+
+        [HttpPost("dislike")]
+        public async Task<IActionResult> Dislike([FromQuery] string id)
+        {
+            var response = await _quizService.Dislike(id);
+            return this.ToActionResult(response);
+        }
     }
 }
