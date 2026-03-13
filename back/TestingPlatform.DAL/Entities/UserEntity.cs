@@ -31,6 +31,8 @@ namespace TestingPlatform.DAL.Entities
 
         public int Crystals { get; set; } = 0;
 
+        public string? AvatarUrl { get; set; } = null;
+
         [Required]
         public Role Role { get; set; }
 

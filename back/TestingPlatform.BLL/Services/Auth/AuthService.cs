@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TestingPlatform.BLL.Dto;
 using TestingPlatform.BLL.Dto.Auth;
 using TestingPlatform.BLL.Dto.User;
+using TestingPlatform.BLL.Services.Storage;
 using TestingPlatform.DAL.Entities;
 using TestingPlatform.DAL.Repositories.User;
 
@@ -20,11 +21,13 @@ namespace TestingPlatform.BLL.Services.Auth
     {
         private readonly IUserRepository _UserRepository;
         private readonly PasswordHasher<UserEntity> _hasher = new();
+        private readonly IStorageServise _storageService;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, IStorageServise storageServise)
         {
 
             _UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _storageService = storageServise;
         }
 
         private static UserDto MapUserDto(UserEntity user)
@@ -88,7 +91,7 @@ namespace TestingPlatform.BLL.Services.Auth
 
 
 
-        public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
+        public async Task<ServiceResponse> RegisterAsync(RegisterDto dto, string imagePath)
         {
 
             if (dto == null)
@@ -101,8 +104,6 @@ namespace TestingPlatform.BLL.Services.Auth
                 };
             }
 
-
-
             var user = new UserEntity
             {
                 Id = Guid.NewGuid().ToString(),
@@ -114,6 +115,21 @@ namespace TestingPlatform.BLL.Services.Auth
 
 
             };
+
+            if (dto.AvatarFile != null)
+            {
+                var avatarFileName = await _storageService.SaveImageFileAsync(dto.AvatarFile, imagePath);
+                if (avatarFileName == null)
+                {
+                    return new ServiceResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        Message = "Не вдалося зберегти зображення"
+                    };
+                }
+                user.AvatarUrl = avatarFileName;
+            }
 
 
             if (await _UserRepository.ExistsByEmailAsync(user.Email))

@@ -9,10 +9,12 @@ namespace TestingPlatform.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IWebHostEnvironment environment)
         {
             _authService = authService;
+            _webHostEnvironment = environment;
         }
 
         [HttpPost("login")]
@@ -25,7 +27,10 @@ namespace TestingPlatform.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto dto)
         {
-            var response = await _authService.RegisterAsync(dto);
+            var rootPath = _webHostEnvironment.ContentRootPath;
+            var imagePath = Path.Combine(rootPath, "storage", "images");
+
+            var response = await _authService.RegisterAsync(dto, imagePath);
             return this.ToActionResult(response);
         }
 
