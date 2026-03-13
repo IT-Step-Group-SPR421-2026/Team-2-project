@@ -8,5 +8,7 @@ namespace TestingPlatform.BLL.Services.User
 {
     public interface IUserService
     {
+        Task<ServiceResponse> GetUserByIdAsync(string userId);
+
     }
 }

@@ -27,5 +27,7 @@ namespace TestingPlatform.DAL.Entities
 
 
         public DateTime? UpdatedDate { get; set; }
+
+        public ICollection<CommentReactionEntity> Reactions { get; set; } = new List<CommentReactionEntity>();
     }
 }
