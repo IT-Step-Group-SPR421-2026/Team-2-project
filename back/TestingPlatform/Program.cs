@@ -6,20 +6,22 @@ using TestingPlatform.BLL.Services.AnswerAttempt;
 using TestingPlatform.BLL.Services.AnswerOption;
 using TestingPlatform.BLL.Services.Attempt;
 using TestingPlatform.BLL.Services.Auth;
+using TestingPlatform.BLL.Services.Comments;
+using TestingPlatform.BLL.Services.Crystal;
 using TestingPlatform.BLL.Services.Question;
 using TestingPlatform.BLL.Services.Quiz;
+using TestingPlatform.BLL.Services.Storage;
 using TestingPlatform.BLL.Services.Translation;
 using TestingPlatform.DAL;
 using TestingPlatform.DAL.Entities.Identity;
 using TestingPlatform.DAL.Initializer;
 using TestingPlatform.DAL.Repositories.AnswerOption;
 using TestingPlatform.DAL.Repositories.Attempt;
+using TestingPlatform.DAL.Repositories.Comments;
 using TestingPlatform.DAL.Repositories.Question;
 using TestingPlatform.DAL.Repositories.Quiz;
 using TestingPlatform.DAL.Repositories.User;
-using TestingPlatform.DAL.Repositories.Comments;
-using TestingPlatform.BLL.Services.Comments;
-using TestingPlatform.BLL.Services.Crystal;
+using TestingPlatform.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +51,7 @@ builder.Services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 // Add Services
-
+builder.Services.AddScoped<IStorageServise, StorageServise>();
 builder.Services.AddScoped<IAnswerAttemptService, AnswerAttemptService>();
 builder.Services.AddScoped<IAnswerOptionService, AnswerOptionService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
@@ -94,6 +96,7 @@ app.UseHttpsRedirection();
 app.UseCors("FrontendCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.AddStaticFiles(app.Environment);
 app.MapControllers();
 
 

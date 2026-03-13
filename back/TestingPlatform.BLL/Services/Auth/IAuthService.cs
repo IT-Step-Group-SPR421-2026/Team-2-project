@@ -10,7 +10,7 @@ namespace TestingPlatform.BLL.Services.Auth
     public interface IAuthService
     {
         Task<ServiceResponse>   LoginAsync(LoginDto dto);
-        Task<ServiceResponse> RegisterAsync(RegisterDto dto);
+        Task<ServiceResponse> RegisterAsync(RegisterDto dto, string imagePath);
         Task<ServiceResponse> UpdateSubscriptionAsync(UpdateSubscriptionDto dto);
 
 
