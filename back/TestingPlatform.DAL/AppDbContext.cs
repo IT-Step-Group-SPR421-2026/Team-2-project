@@ -16,7 +16,9 @@ namespace TestingPlatform.DAL
         public DbSet<AnswerAttemptEntity> AnswerAttempts => Set<AnswerAttemptEntity>();
         public DbSet<AnswerOptionEntity> AnswerOptions => Set<AnswerOptionEntity>();
         public DbSet<AnswerAttemptOptionEntity> AnswerAttemptOptions => Set<AnswerAttemptOptionEntity>();
- 
+
+        public DbSet<CommentReactionEntity> CommentReactions => Set<CommentReactionEntity>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -173,6 +175,24 @@ namespace TestingPlatform.DAL
                       .IsRequired()
                       .OnDelete(DeleteBehavior.Restrict);
                  });
+
+            // -------------------------
+            // CommentReaction
+            // -------------------------
+            modelBuilder.Entity<CommentReactionEntity>(e =>
+            {
+                e.HasOne(x => x.Comment)                 
+                 .WithMany(x => x.Reactions)             
+                 .HasForeignKey(x => x.CommentId)        
+                 .IsRequired()                           
+                 .OnDelete(DeleteBehavior.Cascade);      
+
+                e.HasOne(x => x.User)                     
+                 .WithMany(x => x.CommentReactions)      
+                 .HasForeignKey(x => x.UserId)           
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Restrict);     
+            });
         }
     }
 }

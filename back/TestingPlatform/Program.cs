@@ -6,17 +6,20 @@ using TestingPlatform.BLL.Services.AnswerAttempt;
 using TestingPlatform.BLL.Services.AnswerOption;
 using TestingPlatform.BLL.Services.Attempt;
 using TestingPlatform.BLL.Services.Auth;
+using TestingPlatform.BLL.Services.CommentReactions;
 using TestingPlatform.BLL.Services.Comments;
 using TestingPlatform.BLL.Services.Crystal;
 using TestingPlatform.BLL.Services.Question;
 using TestingPlatform.BLL.Services.Quiz;
 using TestingPlatform.BLL.Services.Storage;
 using TestingPlatform.BLL.Services.Translation;
+using TestingPlatform.BLL.Services.User;
 using TestingPlatform.DAL;
 using TestingPlatform.DAL.Entities.Identity;
 using TestingPlatform.DAL.Initializer;
 using TestingPlatform.DAL.Repositories.AnswerOption;
 using TestingPlatform.DAL.Repositories.Attempt;
+using TestingPlatform.DAL.Repositories.CommentReaction;
 using TestingPlatform.DAL.Repositories.Comments;
 using TestingPlatform.DAL.Repositories.Question;
 using TestingPlatform.DAL.Repositories.Quiz;
@@ -49,7 +52,8 @@ builder.Services.AddScoped<IAttemptRepository, AttemptRepository>();
 builder.Services.AddScoped<IAnswerAttemptRepository, AnswerAttemptRepository>();
 builder.Services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
-
+builder.Services.AddScoped<ICommentReactionRepository, CommentReactionRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 // Add Services
 builder.Services.AddScoped<IStorageServise, StorageServise>();
 builder.Services.AddScoped<IAnswerAttemptService, AnswerAttemptService>();
@@ -59,9 +63,10 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IAttemptService, AttemptService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ITranslationService, TranslationService>();
-builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICrystalService, CrystalService>();
+builder.Services.AddScoped<ICommentReactionService, CommentReactionService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(options =>
 {
