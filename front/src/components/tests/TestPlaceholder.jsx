@@ -552,9 +552,16 @@ function TestPlaceholder() {
         </form>
       )}
 
-      <Link to="/tests" className="test-placeholder-link">
-        {text.testSession.backToTests}
-      </Link>
+ <section className="test-links-container">
+
+ <Link to="/tests" className="test-placeholder-link">
+    {text.testSession.backToTests} {}
+  </Link>
+
+  <Link to={`/comments/${testId}`} className="test-comments-btn">
+    {text.testSession.commentsLink} {}
+  </Link>
+</section>
     </section>
   );
 }

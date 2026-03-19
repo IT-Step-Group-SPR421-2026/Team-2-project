@@ -8,6 +8,7 @@ import TestDetailsPage from './pages/TestDetails';
 import ProfilePage from './pages/Profile';
 import SubscriptionPage from './pages/Subscription';
 import { GuestOnlyRoute, ProtectedRoute } from './routes/ProtectedRoute';
+import CommentsPage from './pages/Comments';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/tests/:testId" element={<TestDetailsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/comments/:testId" element={<CommentsPage/>} />
         </Route>
 
         <Route element={<GuestOnlyRoute />}>
