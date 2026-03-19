@@ -298,3 +298,24 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.test-comments-btn {
+  display: inline-block;
+  color: var(--color-brand);
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 24px; 
+
+}
+
+.test-comments-btn:hover {
+  color: var(--color-brand-hover);
+}
+
+.test-links-container {
+  display: flex;         
+  justify-content: space-between; 
+  align-items: center;    
+  padding: 10px;          
+}

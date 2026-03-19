@@ -123,6 +123,11 @@ export const APP_TEXT = {
       persistSaved: 'Result saved to backend.',
       persistFailed: 'Result calculated, but backend save failed.',
       persistLocalOnly: 'Result calculated locally. No active backend attempt found for this quiz.',
+      commentsLink: "Comments",
+      commentsBack: 'Back to test',
+      noComments: 'No comments yet',
+      userLabel: 'User',   
+      
       premium: {
         plan: 'Plan',
         dailyUsage: 'Tests today: {{completed}} / {{limit}} (left: {{remaining}})',
@@ -276,6 +281,11 @@ export const APP_TEXT = {
       persistSaved: 'Результат збережено на бекенді.',
       persistFailed: 'Результат обчислено, але збереження на бекенді не вдалося.',
       persistLocalOnly: 'Результат обчислено локально. Активної спроби на бекенді для цього тесту не знайдено.',
+      commentsLink: "Коментарі",
+      commentsBack: 'Назад до тесту',
+       noComments: 'Коментарів ще немає',
+      userLabel: 'Користувач',
+      
       premium: {
         plan: 'План',
         dailyUsage: 'Тестів сьогодні: {{completed}} / {{limit}} (залишилось: {{remaining}})',
