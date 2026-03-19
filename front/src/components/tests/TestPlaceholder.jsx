@@ -10,6 +10,8 @@ import './TestPlaceholder.css';
 import { getStoredLanguage, subscribeToLanguageChange } from '../../utils/language';
 import { formatText, useAppText } from '../../utils/i18n';
 import { useAuth } from '../../context/AuthContext';
+import { addCrystals  } from '../../api/crystalsApi';
+import { useCrystals } from '../../context/CrystalsContext';
 import {
   consumeDailyTestAttempt,
   getCompletedTestsToday,
@@ -67,7 +69,7 @@ function TestPlaceholder() {
   const currentPlan = getSubscriptionPlanName(user?.subscriptionStatus);
   const testsRemainingToday = Math.max(0, dailyLimit - completedToday);
   const isDailyLimitReached = completedToday >= dailyLimit;
-
+ const { refreshCrystals } = useCrystals();
   useEffect(() => {
     return subscribeToLanguageChange(setLanguage);
   }, []);
@@ -142,7 +144,20 @@ function TestPlaceholder() {
       isMounted = false;
     };
   }, [language, location.state?.test, testId, text.testSession.loadError, user?.name, user?.subscriptionStatus, user?.testLimit, userId]);
+useEffect(() => {
+  if (!user?.id || !result) return;
 
+  (async () => {
+    try {
+      const earned = result.score; 
+      await addCrystals(earned);   
+      await refreshCrystals();      
+      console.log("Crystals updated!");
+    } catch (err) {
+      console.error("Failed to add crystals", err);
+    }
+  })();
+}, [result, user?.id]);
   const title =
     session.quiz.title ||
     location.state?.test?.title ||
