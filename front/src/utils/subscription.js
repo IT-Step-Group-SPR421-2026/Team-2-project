@@ -1,8 +1,10 @@
-import { SUBSCRIPTION_STATUS } from '../api/userEntity';
-
-const DAILY_TESTS_STORAGE_KEY = 'testflow_daily_test_usage';
-const STANDARD_DAILY_TEST_LIMIT = 2;
-const PREMIUM_DAILY_TEST_LIMIT = 5;
+import {
+  DAILY_TESTS_STORAGE_KEY,
+  PREMIUM_DAILY_TEST_LIMIT,
+  STANDARD_DAILY_TEST_LIMIT,
+  SUBSCRIPTION_STATUS,
+} from '../constants';
+import { normalizePositiveInt } from './helper';
 
 function getTodayDateKey() {
   const now = new Date();
@@ -67,16 +69,6 @@ export function isPremiumSubscriptionStatus(status) {
 
 export function isPremiumUser(user) {
   return isPremiumSubscriptionStatus(user?.subscriptionStatus);
-}
-
-function normalizePositiveInt(value) {
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric)) {
-    return null;
-  }
-
-  const normalized = Math.floor(numeric);
-  return normalized > 0 ? normalized : null;
 }
 
 export function getDailyTestLimit(status, explicitLimit = null) {

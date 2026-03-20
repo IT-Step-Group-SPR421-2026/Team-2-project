@@ -1,7 +1,8 @@
 import Header from '../components/Header';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { useAppText } from '../utils/i18n';
-import { ROLE, SUBSCRIPTION_STATUS } from '../api/userEntity';
+import { ROLE, SUBSCRIPTION_STATUS } from '../constants';
+import './Profile.css';
 
 function getRoleLabel(value, fallback) {
   if (value === ROLE.USER) {
@@ -31,12 +32,21 @@ function ProfilePage() {
     <div className="app">
       <Header />
       <main>
-        <section className="hero-card" style={{ width: 'min(560px, 92vw)' }}>
-          <h1 style={{ marginBottom: '0.75rem', color: 'var(--color-brand-dark)' }}>{text.profile.title}</h1>
-          <p style={{ color: '#2a5f56' }}><strong>{text.profile.name}:</strong> {user?.name || text.profile.noValue}</p>
-          <p style={{ color: '#2a5f56' }}><strong>{text.profile.email}:</strong> {user?.email || text.profile.noValue}</p>
-          <p style={{ color: '#2a5f56' }}><strong>Role:</strong> {getRoleLabel(user?.role, text.profile.noValue)}</p>
-          <p style={{ color: '#2a5f56' }}><strong>Subscription:</strong> {getSubscriptionLabel(user?.subscriptionStatus, text.profile.noValue)}</p>
+        <section className="hero-card profile-card">
+          <h1 className="profile-title">{text.profile.title}</h1>
+          <p className="profile-line">
+            <strong>{text.profile.name}:</strong> {user?.name || text.profile.noValue}
+          </p>
+          <p className="profile-line">
+            <strong>{text.profile.email}:</strong> {user?.email || text.profile.noValue}
+          </p>
+          <p className="profile-line">
+            <strong>Role:</strong> {getRoleLabel(user?.role, text.profile.noValue)}
+          </p>
+          <p className="profile-line">
+            <strong>Subscription:</strong>{' '}
+            {getSubscriptionLabel(user?.subscriptionStatus, text.profile.noValue)}
+          </p>
         </section>
       </main>
     </div>

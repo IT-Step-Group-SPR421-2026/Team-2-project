@@ -1,7 +1,8 @@
 import httpClient from './httpClient';
 import { getStoredLanguage } from '../utils/language';
 import { getAppText } from '../utils/i18n';
-import { normalizeUserEntity, resolveDefaultRole, ROLE } from './userEntity';
+import { ROLE } from '../constants';
+import { normalizeUserEntity, resolveDefaultRole } from '../utils/helper';
 
 function getApiText() {
   return getAppText(getStoredLanguage()).api;
@@ -9,11 +10,7 @@ function getApiText() {
 
 function extractMessage(data) {
   const apiText = getApiText();
-  if (!data || typeof data !== 'object') {
-    return apiText.unexpectedResponse;
-  }
-
-  return data.message ?? data.Message ?? '';
+  return data?.message ?? apiText.unexpectedResponse;
 }
 
 function buildError(error) {
@@ -27,18 +24,7 @@ function buildError(error) {
 }
 
 function extractUserEntityFromResponse(data) {
-  const candidate =
-    data?.payload?.user ??
-    data?.payload?.User ??
-    data?.payload?.userEntity ??
-    data?.payload?.UserEntity ??
-    data?.user ??
-    data?.User ??
-    data?.userEntity ??
-    data?.UserEntity ??
-    data?.payload;
-
-  return normalizeUserEntity(candidate);
+  return normalizeUserEntity(data.payload.user);
 }
 
 export async function registerApi({ name, email, password, role = ROLE.USER }) {
@@ -52,8 +38,8 @@ export async function registerApi({ name, email, password, role = ROLE.USER }) {
     });
 
     return {
-      message: extractMessage(response?.data) || apiText.registrationSuccess,
-      user: extractUserEntityFromResponse(response?.data),
+      message: extractMessage(response.data) || apiText.registrationSuccess,
+      user: extractUserEntityFromResponse(response.data),
     };
   } catch (error) {
     throw buildError(error);
@@ -69,8 +55,8 @@ export async function loginApi({ name, password }) {
     });
 
     return {
-      message: extractMessage(response?.data) || apiText.loginSuccess,
-      user: extractUserEntityFromResponse(response?.data),
+      message: extractMessage(response.data) || apiText.loginSuccess,
+      user: extractUserEntityFromResponse(response.data),
     };
   } catch (error) {
     throw buildError(error);
@@ -86,8 +72,8 @@ export async function updateSubscriptionApi({ userId, subscriptionStatus }) {
     });
 
     return {
-      message: extractMessage(response?.data) || apiText.subscriptionUpdated,
-      user: extractUserEntityFromResponse(response?.data),
+      message: extractMessage(response.data) || apiText.subscriptionUpdated,
+      user: extractUserEntityFromResponse(response.data),
     };
   } catch (error) {
     throw buildError(error);

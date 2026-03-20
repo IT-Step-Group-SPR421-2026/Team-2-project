@@ -9,27 +9,28 @@ import ProfilePage from './pages/Profile';
 import SubscriptionPage from './pages/Subscription';
 import { GuestOnlyRoute, ProtectedRoute } from './routes/ProtectedRoute';
 import CommentsPage from './pages/Comments';
+import { HEADER_ROUTES, ROUTE_PATTERNS } from './constants';
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path={HEADER_ROUTES.HOME} element={<HomePage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/tests" element={<TestsPage />} />
-          <Route path="/tests/:testId" element={<TestDetailsPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/subscription" element={<SubscriptionPage />} />
-          <Route path="/comments/:testId" element={<CommentsPage/>} />
+          <Route path={HEADER_ROUTES.TESTS} element={<TestsPage />} />
+          <Route path={ROUTE_PATTERNS.TEST_DETAILS} element={<TestDetailsPage />} />
+          <Route path={HEADER_ROUTES.PROFILE} element={<ProfilePage />} />
+          <Route path={HEADER_ROUTES.SUBSCRIPTION} element={<SubscriptionPage />} />
+          <Route path={ROUTE_PATTERNS.COMMENTS} element={<CommentsPage />} />
         </Route>
 
         <Route element={<GuestOnlyRoute />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path={HEADER_ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={HEADER_ROUTES.REGISTER} element={<RegisterPage />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to={HEADER_ROUTES.HOME} replace />} />
       </Routes>
     </div>
   );

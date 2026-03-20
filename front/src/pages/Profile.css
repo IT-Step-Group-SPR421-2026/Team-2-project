@@ -1,0 +1,12 @@
+.profile-card {
+  width: min(560px, 92vw);
+}
+
+.profile-title {
+  margin-bottom: 0.75rem;
+  color: var(--color-brand-dark);
+}
+
+.profile-line {
+  color: #2a5f56;
+}

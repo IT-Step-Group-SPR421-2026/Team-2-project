@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import './TestCard.css';
 import { formatText, useAppText } from '../../utils/i18n';
+import { buildTestDetailsRoute } from '../../constants';
 
 function TestCard({ test }) {
   const { text } = useAppText();
   const minutes = Math.floor(test.timeLimitSeconds / 60);
 
   return (
-    <Link className="test-card" to={`/tests/${encodeURIComponent(test.id)}`} state={{ test }}>
+    <Link className="test-card" to={buildTestDetailsRoute(test.id)} state={{ test }}>
       <div className="test-card-top">
         <h3 className="test-card-title">{test.title}</h3>
         <span className={`test-card-visibility ${test.isPublic ? 'test-card-public' : 'test-card-private'}`}>

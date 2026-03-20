@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import AuthInputField from './AuthInputField';
 import { useAppText } from '../../utils/i18n';
 import { HEADER_ROUTES } from '../../constants';
