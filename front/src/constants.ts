@@ -38,8 +38,7 @@ export const STANDARD_DAILY_TEST_LIMIT = 2;
 export const PREMIUM_DAILY_TEST_LIMIT = 5;
 export const MIN_PASSWORD_LENGTH = 8;
 
-export const API_BASE_URL = 'http://localhost:5043';
-export const CRYSTALS_API_URL = `${API_BASE_URL}/api/crystals`;
+export const CRYSTALS_API_URL = '/api/crystals';
 
 export const GRPC_URLS = {
   testnet: 'https://fullnode.testnet.sui.io:443',
