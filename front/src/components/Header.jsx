@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { HEADER_ROUTES, LANGUAGE_LABELS } from '../constants';
 import { useAppText } from '../utils/i18n';
 import { ConnectButton } from '@mysten/dapp-kit-react/ui';
-
+import { getCrystals } from '../api/crystalsApi';
+import { useCrystals } from '../context/CrystalsContext';
 function Header() {
   const { text } = useAppText();
   const { pathname } = useLocation();
@@ -21,7 +22,8 @@ function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const languageMenuRef = useRef(null);
   const userMenuRef = useRef(null);
-
+  const [crystals_state, setCrystals] = useState(0);
+  const { crystals } = useCrystals();
   useEffect(() => {
     function handlePointerDown(event) {
       const target = event.target;
@@ -50,7 +52,22 @@ function Header() {
       document.removeEventListener('keydown', handleEscPress);
     };
   }, []);
+useEffect(() => {
+  async function loadCrystals() {
+    try {
+      const data = await getCrystals();
 
+    setCrystals(data.payload); 
+
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  if (isAuthenticated) {
+    loadCrystals();
+  }
+}, [isAuthenticated]);    
   function handleLanguageChange(nextLanguage) {
     const normalizedLanguage = setStoredLanguage(nextLanguage);
     setLanguage(normalizedLanguage);
@@ -113,7 +130,13 @@ function Header() {
               aria-haspopup="menu"
               aria-expanded={isUserMenuOpen}
             >
-              <span className="user-name">{user?.name}</span>
+              <span className="user-name">{user?.name} </span>
+            </button>
+             <button
+              type="button"
+              className={`menu-trigger user-trigger user-crystals-btn ${isUserMenuOpen ? ' menu-trigger-open' : ''}`}
+            >
+              <span className="user-name">{"\u{1F48E}"} {crystals ?? 0}</span>
             </button>
             {isUserMenuOpen && (
               <div className="dropdown-menu user-menu" role="menu" aria-label={text.header.userMenuAria}>
