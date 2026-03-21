@@ -3,6 +3,7 @@ import {
   LANGUAGE_STORAGE_KEY,
   LANGUAGE_VALUES,
 } from '../constants';
+import { normalizeLanguage } from './helper';
 
 export const LANGUAGE_UKR = LANGUAGE_VALUES.UKR;
 export const LANGUAGE_ENG = LANGUAGE_VALUES.ENG;
@@ -10,14 +11,6 @@ export const LANGUAGE_ENG = LANGUAGE_VALUES.ENG;
 /**
  * @typedef {import('../types').AppLanguage} AppLanguage
  */
-
-/**
- * @param {unknown} value
- * @returns {AppLanguage}
- */
-function normalizeLanguage(value) {
-  return value === LANGUAGE_UKR ? LANGUAGE_UKR : LANGUAGE_ENG;
-}
 
 /**
  * @returns {AppLanguage}
@@ -61,7 +54,7 @@ export function subscribeToLanguageChange(callback) {
   }
 
   const handler = (event) => {
-    callback(normalizeLanguage(event?.detail));
+    callback(normalizeLanguage(event.detail));
   };
 
   window.addEventListener(LANGUAGE_CHANGE_EVENT, handler);

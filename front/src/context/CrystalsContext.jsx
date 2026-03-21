@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getCrystals } from '../api/crystalsApi';
-import { useAuth } from './AuthContext';
-
-const CrystalsContext = createContext();
+import { useAuth } from './useAuth';
+import { CrystalsContext } from './crystalsContext';
 
 export function CrystalsProvider({ children }) {
   const { user } = useAuth();
   const [crystals, setCrystals] = useState(0);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!user?.id) {
       setCrystals(0);
@@ -18,8 +18,8 @@ export function CrystalsProvider({ children }) {
     const loadCrystals = async () => {
       setLoading(true);
       try {
-        const data = await getCrystals(user.id); 
-        setCrystals(data?.payload ?? 0);
+        const payload = await getCrystals(user.id);
+        setCrystals(payload);
       } catch (e) {
         console.error(e);
         setCrystals(0);
@@ -34,8 +34,8 @@ export function CrystalsProvider({ children }) {
   const refreshCrystals = async () => {
     if (!user?.id) return;
     try {
-      const data = await getCrystals(user.id);
-      setCrystals(data?.payload ?? 0);
+      const payload = await getCrystals(user.id);
+      setCrystals(payload);
     } catch (e) {
       console.error(e);
     }
@@ -47,5 +47,3 @@ export function CrystalsProvider({ children }) {
     </CrystalsContext.Provider>
   );
 }
-
-export const useCrystals = () => useContext(CrystalsContext);

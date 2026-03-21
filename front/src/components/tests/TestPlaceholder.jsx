@@ -9,9 +9,10 @@ import {
 import './TestPlaceholder.css';
 import { getStoredLanguage, subscribeToLanguageChange } from '../../utils/language';
 import { formatText, useAppText } from '../../utils/i18n';
-import { useAuth } from '../../context/AuthContext';
-import { addCrystals  } from '../../api/crystalsApi';
-import { useCrystals } from '../../context/CrystalsContext';
+import { useAuth } from '../../context/useAuth';
+import { addCrystals } from '../../api/crystalsApi';
+import { useCrystals } from '../../context/useCrystals';
+import { buildCommentsRoute, HEADER_ROUTES } from '../../constants';
 import {
   consumeDailyTestAttempt,
   getCompletedTestsToday,
@@ -69,7 +70,8 @@ function TestPlaceholder() {
   const currentPlan = getSubscriptionPlanName(user?.subscriptionStatus);
   const testsRemainingToday = Math.max(0, dailyLimit - completedToday);
   const isDailyLimitReached = completedToday >= dailyLimit;
- const { refreshCrystals } = useCrystals();
+  const { refreshCrystals } = useCrystals();
+
   useEffect(() => {
     return subscribeToLanguageChange(setLanguage);
   }, []);
@@ -144,20 +146,20 @@ function TestPlaceholder() {
       isMounted = false;
     };
   }, [language, location.state?.test, testId, text.testSession.loadError, user?.name, user?.subscriptionStatus, user?.testLimit, userId]);
-useEffect(() => {
-  if (!user?.id || !result) return;
 
-  (async () => {
-    try {
-      const earned = result.score; 
-      await addCrystals(earned);   
-      await refreshCrystals();      
-      console.log("Crystals updated!");
-    } catch (err) {
-      console.error("Failed to add crystals", err);
-    }
-  })();
-}, [result, user?.id]);
+  useEffect(() => {
+    if (!user?.id || !result) return;
+
+    (async () => {
+      try {
+        await addCrystals(result.score);
+        await refreshCrystals();
+      } catch (err) {
+        console.error('Failed to add crystals', err);
+      }
+    })();
+  }, [refreshCrystals, result, user?.id]);
+
   const title =
     session.quiz.title ||
     location.state?.test?.title ||
@@ -167,7 +169,7 @@ useEffect(() => {
 
   const questionsWithMeta = useMemo(() => {
     return session.questions.map((question) => {
-      const options = Array.isArray(question.options) ? question.options : [];
+      const options = question.options;
       const correctOptions = options.filter((option) => option.isCorrect);
       return {
         ...question,
@@ -567,16 +569,15 @@ useEffect(() => {
         </form>
       )}
 
- <section className="test-links-container">
+      <section className="test-links-container">
+        <Link to={HEADER_ROUTES.TESTS} className="test-placeholder-link">
+          {text.testSession.backToTests}
+        </Link>
 
- <Link to="/tests" className="test-placeholder-link">
-    {text.testSession.backToTests} {}
-  </Link>
-
-  <Link to={`/comments/${testId}`} className="test-comments-btn">
-    {text.testSession.commentsLink} {}
-  </Link>
-</section>
+        <Link to={buildCommentsRoute(testId)} className="test-comments-btn">
+          {text.testSession.commentsLink}
+        </Link>
+      </section>
     </section>
   );
 }

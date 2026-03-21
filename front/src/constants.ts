@@ -5,7 +5,21 @@ export const HEADER_ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   PROFILE: '/profile',
+  COMMENTS: '/comments',
 } as const;
+
+export const ROUTE_PATTERNS = {
+  TEST_DETAILS: `${HEADER_ROUTES.TESTS}/:testId`,
+  COMMENTS: `${HEADER_ROUTES.COMMENTS}/:testId`,
+} as const;
+
+export function buildTestDetailsRoute(testId: string | number) {
+  return `${HEADER_ROUTES.TESTS}/${encodeURIComponent(String(testId))}`;
+}
+
+export function buildCommentsRoute(testId: string | number) {
+  return `${HEADER_ROUTES.COMMENTS}/${encodeURIComponent(String(testId))}`;
+}
 
 export const HEADER_LABELS = {
   BRAND: 'Test flow',
@@ -16,6 +30,18 @@ export const HEADER_LABELS = {
   LANGUAGE_MENU_ARIA: 'Language options',
   USER_MENU_ARIA: 'User menu',
   MAIN_NAV_ARIA: 'Main navigation',
+} as const;
+
+export const AUTH_STORAGE_KEY = 'testflow_auth_user';
+export const DAILY_TESTS_STORAGE_KEY = 'testflow_daily_test_usage';
+export const STANDARD_DAILY_TEST_LIMIT = 2;
+export const PREMIUM_DAILY_TEST_LIMIT = 5;
+export const MIN_PASSWORD_LENGTH = 8;
+
+export const CRYSTALS_API_URL = '/api/crystals';
+
+export const GRPC_URLS = {
+  testnet: 'https://fullnode.testnet.sui.io:443',
 } as const;
 
 export const LANGUAGE_STORAGE_KEY = 'testflow-language';
@@ -30,6 +56,51 @@ export const LANGUAGE_LABELS = {
   ukr: 'Ukr',
   eng: 'Eng',
 } as const;
+
+export const ROLE = Object.freeze({
+  USER: 0,
+  ADMIN: 1,
+});
+
+export const SUBSCRIPTION_STATUS = Object.freeze({
+  STANDARD: 0,
+  PREMIUM: 1,
+});
+
+export const SUBSCRIPTION_PLAN_KEYS = {
+  STANDART: 'standart',
+  PREMIUM: 'premium',
+} as const;
+
+export const SUBSCRIPTION_PLAN_ORDER = [
+  SUBSCRIPTION_PLAN_KEYS.STANDART,
+  SUBSCRIPTION_PLAN_KEYS.PREMIUM,
+] as const;
+
+export const SUBSCRIPTION_PLAN_PRICES = {
+  [SUBSCRIPTION_PLAN_KEYS.STANDART]: '$0',
+  [SUBSCRIPTION_PLAN_KEYS.PREMIUM]: '0.01 SUI',
+} as const;
+
+export const SUBSCRIPTION_PACKAGE_ID =
+  '0x89cf31753d34eabe4601345a41daf500a39ef33ab46a7c853a7c1bd60689aa8f';
+
+export const SUBSCRIPTION_MODULE_NAME = 'testflow_subscription';
+
+export const SUBSCRIPTION_METHODS = {
+  CREATE_PROFILE: 'new',
+  BUY_PREMIUM: 'buy_premium_status',
+} as const;
+
+export const PREMIUM_PRICE_MIST = 10000000;
+
+export const SUBSCRIPTION_OBJECT_TYPES = {
+  APP: `${SUBSCRIPTION_PACKAGE_ID}::${SUBSCRIPTION_MODULE_NAME}::App`,
+  PROFILE: `${SUBSCRIPTION_PACKAGE_ID}::${SUBSCRIPTION_MODULE_NAME}::Profile`,
+} as const;
+
+export const SUBSCRIPTION_PROFILE_STORAGE_KEY = 'testflow:subscription:profile-by-wallet:v1';
+export const SUBSCRIPTION_APP_STORAGE_KEY = 'testflow:subscription:app-object-id:v1';
 
 export const APP_TEXT = {
   eng: {

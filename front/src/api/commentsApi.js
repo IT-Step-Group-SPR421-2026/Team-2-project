@@ -1,7 +1,7 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
 export async function getCommentsByQuizId(quizId) {
-  const response = await httpClient.get(`/api/comments/quiz`, {
+  const response = await httpClient.get('/api/comments/quiz', {
     params: { quizId },
   });
 

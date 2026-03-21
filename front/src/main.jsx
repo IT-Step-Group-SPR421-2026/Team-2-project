@@ -6,11 +6,8 @@ import { SuiGrpcClient } from '@mysten/sui/grpc'
 import './global.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
-import { CrystalsProvider } from './context/CrystalsContext';
-
-const GRPC_URLS = {
-  testnet: 'https://fullnode.testnet.sui.io:443',
-}
+import { CrystalsProvider } from './context/CrystalsContext.jsx';
+import { GRPC_URLS } from './constants';
 
 const dAppKit = createDAppKit({
   networks: ['testnet'],

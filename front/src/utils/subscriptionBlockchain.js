@@ -7,19 +7,8 @@ import {
   SUBSCRIPTION_OBJECT_TYPES,
   SUBSCRIPTION_PACKAGE_ID,
   SUBSCRIPTION_PROFILE_STORAGE_KEY,
-} from '../constants/subscriptionBlockchain';
-
-function normalizeText(value) {
-  return typeof value === 'string' ? value.trim() : '';
-}
-
-function normalizeAddress(value) {
-  return normalizeText(value).toLowerCase();
-}
-
-function normalizeType(value) {
-  return normalizeText(value).toLowerCase();
-}
+} from '../constants';
+import { normalizeAddress, normalizeText, normalizeType } from './helper';
 
 function readJsonStorage(key, fallbackValue) {
   if (typeof window === 'undefined') {

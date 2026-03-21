@@ -1,4 +1,4 @@
-const MIN_PASSWORD_LENGTH = 8;
+import { MIN_PASSWORD_LENGTH } from '../constants';
 
 function formatTemplate(template, params = {}) {
   if (typeof template !== 'string') {

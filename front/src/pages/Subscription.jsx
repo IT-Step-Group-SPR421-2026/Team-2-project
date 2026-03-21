@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useCurrentAccount, useCurrentClient, useDAppKit } from '@mysten/dapp-kit-react';
 import Header from '../components/Header';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { useAppText } from '../utils/i18n';
 import {
   getCompletedTestsToday,
@@ -14,8 +14,8 @@ import {
   SUBSCRIPTION_PLAN_KEYS,
   SUBSCRIPTION_PLAN_ORDER,
   SUBSCRIPTION_PLAN_PRICES,
-} from '../constants/subscriptionPlans';
-import { SUBSCRIPTION_STATUS } from '../api/userEntity';
+  SUBSCRIPTION_STATUS,
+} from '../constants';
 import {
   buyPremiumStatus,
   ensureProfileObjectId,
@@ -71,7 +71,7 @@ function SubscriptionPage() {
           name: planText?.name ?? '',
           description: planText?.description ?? '',
           cta: planText?.cta ?? '',
-          features: Array.isArray(planText?.features) ? planText.features : [],
+          features: planText?.features ?? [],
         };
       }),
     [pageText, premium],

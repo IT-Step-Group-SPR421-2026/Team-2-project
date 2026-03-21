@@ -1,13 +1,13 @@
 import './Header.css';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { LANGUAGE_ENG, LANGUAGE_UKR, getStoredLanguage, setStoredLanguage } from '../utils/language';
 import { useEffect, useRef, useState } from 'react';
 import { HEADER_ROUTES, LANGUAGE_LABELS } from '../constants';
 import { useAppText } from '../utils/i18n';
 import { ConnectButton } from '@mysten/dapp-kit-react/ui';
-import { getCrystals } from '../api/crystalsApi';
-import { useCrystals } from '../context/CrystalsContext';
+import { useCrystals } from '../context/useCrystals';
+
 function Header() {
   const { text } = useAppText();
   const { pathname } = useLocation();
@@ -22,8 +22,8 @@ function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const languageMenuRef = useRef(null);
   const userMenuRef = useRef(null);
-  const [crystals_state, setCrystals] = useState(0);
   const { crystals } = useCrystals();
+
   useEffect(() => {
     function handlePointerDown(event) {
       const target = event.target;
@@ -52,22 +52,7 @@ function Header() {
       document.removeEventListener('keydown', handleEscPress);
     };
   }, []);
-useEffect(() => {
-  async function loadCrystals() {
-    try {
-      const data = await getCrystals();
 
-    setCrystals(data.payload); 
-
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  if (isAuthenticated) {
-    loadCrystals();
-  }
-}, [isAuthenticated]);    
   function handleLanguageChange(nextLanguage) {
     const normalizedLanguage = setStoredLanguage(nextLanguage);
     setLanguage(normalizedLanguage);

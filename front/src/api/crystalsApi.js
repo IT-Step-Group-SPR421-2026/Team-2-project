@@ -1,70 +1,41 @@
-const BASE_URL = "http://localhost:5043/api/crystals";
+import { AUTH_STORAGE_KEY, CRYSTALS_API_URL } from '../constants';
 
-
-function getUser() {
-  const raw = localStorage.getItem("testflow_auth_user");
+function getStoredUser() {
+  const raw = localStorage.getItem(AUTH_STORAGE_KEY);
   return raw ? JSON.parse(raw) : null;
 }
 
-
-function getUserId() {
-  const user = getUser();
-  return user?.id;
+function resolveUserId(explicitUserId) {
+  return explicitUserId ?? getStoredUser()?.id ?? '';
 }
 
-
-export async function getCrystals() {
-  const userId = getUserId();
-
-  if (!userId) throw new Error("User not found");
-
-  const res = await fetch(`${BASE_URL}?userId=${userId}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch crystals");
+async function sendCrystalsRequest(path, { method = 'GET', userId, amount } = {}) {
+  const resolvedUserId = resolveUserId(userId);
+  if (!resolvedUserId) {
+    throw new Error('User not found');
   }
 
-  return await res.json();
+  const amountQuery = amount !== undefined ? `&amount=${amount}` : '';
+  const res = await fetch(`${CRYSTALS_API_URL}${path}?userId=${resolvedUserId}${amountQuery}`, {
+    method,
+  });
+
+  if (!res.ok) {
+    throw new Error('Crystals request failed');
+  }
+
+  const data = await res.json();
+  return data.payload;
 }
 
-
-export async function addCrystals(amount) {
-  const userId = getUserId();
-
-  if (!userId) throw new Error("User not found");
-
-  const res = await fetch(
-    `${BASE_URL}/add?userId=${userId}&amount=${amount}`,
-    {
-      method: "POST",
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to add crystals");
-  }
-
-  return await res.json();
+export async function getCrystals(userId) {
+  return sendCrystalsRequest('', { userId });
 }
 
+export async function addCrystals(amount, userId) {
+  return sendCrystalsRequest('/add', { method: 'POST', amount, userId });
+}
 
-export async function spendCrystals(amount) {
-  const userId = getUserId();
-
-  if (!userId) throw new Error("User not found");
-
-  const res = await fetch(
-    `${BASE_URL}/spend?userId=${userId}&amount=${amount}`,
-    {
-      method: "POST",
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to spend crystals");
-  }
-
-    const data = await res.json();
-
-    return data.payload;
+export async function spendCrystals(amount, userId) {
+  return sendCrystalsRequest('/spend', { method: 'POST', amount, userId });
 }

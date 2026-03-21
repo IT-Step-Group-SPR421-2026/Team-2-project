@@ -61,7 +61,7 @@ function TestsCatalog() {
     }
 
     return tests.filter((test) =>
-      (test.sharedCode ?? '').toLowerCase().includes(normalizedQuery),
+      test.sharedCode.toLowerCase().includes(normalizedQuery),
     );
   }, [normalizedQuery, tests]);
 
